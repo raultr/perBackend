@@ -1,0 +1,8 @@
+Reiniciar postgresql:
+	sudo service postgresql restart
+Reiniciar syslog:
+	sudo service rsyslog restart
+Consultar Actividad de consultas de postgres:
+	SELECT datname,usename,client_addr,waiting,query FROM pg_stat_activity;
+
+	
