@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'PersoRegBackEnd.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'personalbd',                      
+        'NAME': 'personal',                      
         'USER': 'raultr-hp',
         'PASSWORD': 'rulo1000',
         'HOST': 'localhost'

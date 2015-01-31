@@ -4,9 +4,9 @@ from django.db.models import Max
 from catalogos.models import Catalogo
 
 class CatalogoDetalle(models.Model):
+	cdu_catalogo = models.CharField(primary_key=True, max_length=7,default="0000000",unique=True,editable=False)
 	catalogos = models.ForeignKey(Catalogo, related_name='catalogos_detalle')
 	num_dcatalogo= models.IntegerField(default=0,help_text="clave consecutiva del detalle del catalogo")
-	cdu_catalogo = models.CharField(max_length=7,default="0000000",unique=True,editable=False)
 	descripcion1  = models.CharField(max_length=255)
 	descripcion2 = models.CharField(max_length=255, blank=True)
 	monto1 = models.DecimalField(max_digits=18,decimal_places=2,default=Decimal('0.00'))

@@ -15,14 +15,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CatalogoDetalle',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('num_dcatalogo', models.IntegerField()),
+                ('cdu_catalogo', models.CharField(primary_key=True, default=b'0000000', serialize=False, editable=False, max_length=7, unique=True)),
+                ('num_dcatalogo', models.IntegerField(default=0, help_text=b'clave consecutiva del detalle del catalogo')),
                 ('descripcion1', models.CharField(max_length=255)),
                 ('descripcion2', models.CharField(max_length=255, blank=True)),
                 ('monto1', models.DecimalField(default=Decimal('0.00'), max_digits=18, decimal_places=2)),
                 ('monto2', models.DecimalField(default=Decimal('0.00'), max_digits=18, decimal_places=2)),
-                ('udc_default', models.CharField(max_length=7)),
-                ('catalogos', models.ForeignKey(to='catalogos.Catalogo')),
+                ('cdu_default', models.CharField(max_length=7, blank=True)),
+                ('catalogos', models.ForeignKey(related_name='catalogos_detalle', to='catalogos.Catalogo')),
             ],
             options={
             },

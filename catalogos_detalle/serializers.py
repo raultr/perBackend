@@ -6,5 +6,6 @@ class CatalogoSerializer(serializers.ModelSerializer):
 		#catalogos= serializers.RelatedField(many=False)
 		class Meta:
 			model = CatalogoDetalle
-			fields = ('id', 'cdu_catalogo','num_dcatalogo','descripcion1','descripcion2',
+			#lookup_field = 'cdu_catalogo'
+			fields = ( 'cdu_catalogo','num_dcatalogo','descripcion1','descripcion2',
 				'monto1','monto2','cdu_default','catalogos')
