@@ -1,10 +1,20 @@
 from rest_framework import serializers
 from .models import Personal
 
+
 class PersonalSerializer(serializers.ModelSerializer):
+	matricula = serializers.IntegerField(required=False)
+	fec_nacimiento = serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
+
+	def get_validation_exclusions(self, *args, **kwargs):
+		exclusions = super(PersonalSerializer, self).get_validation_exclusions(*args, **kwargs)
+		#import ipdb; ipdb.set_trace()
+		return exclusions + ['matricula']
+
 	class Meta:
 		model = Personal
-		
-		fields =('matricula','paterno','materno','nombre','rfc','curp','cuip','fec_nacimiento',
-			'cdu_estado_nac','cdu_municipio_nac','cdu_escolaridad','cdu_religion',
+	
+		fields =('id','paterno','matricula','materno','nombre','rfc','curp','cuip','fec_nacimiento',
+			'cdu_estado_nac','cdu_municipio_nac','cdu_estado_civil','cdu_escolaridad','cdu_religion',
 			 'cdu_seguridad_social','id_seguridad_social','portacion',)
+		#read_only_fields = ('matricula',)django "Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]"

@@ -1,5 +1,6 @@
 import re
 from django.shortcuts import render, get_object_or_404, get_list_or_404 
+from django.http import Http404
 from django.db import connection
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -13,12 +14,30 @@ from .models import Personal
 
 
 class PersonalOperaciones(APIView):
+	def get_object(self, pk):
+		try:
+			return Personal.objects.get(pk=pk)
+		except Personal.DoesNotExist:
+			raise Http404
+
+
 	def post(self, request):
-		serializer = PersonalSerializer(data=request.DATA)
+	 	serializer = PersonalSerializer(data=request.DATA)
+	 	if serializer.is_valid():
+	 		serializer.save()
+	 		return Response(serializer.data, status=status.HTTP_201_CREATED)
+	 	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
+	def put(self, request, pk, format=None):
+		id = self.get_object(pk)
+		serializer = PersonalSerializer(id,data=request.DATA)
+		print "Estoy validando"
 		if serializer.is_valid():
+			print "ya valide"
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 	
 class PersonalBusqueda(APIView):
 	def get(self, request, valor_buscado):

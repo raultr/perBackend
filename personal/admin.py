@@ -4,7 +4,7 @@ from .models import Personal
 
 class PersonalAdmin(admin.ModelAdmin):
 	list_display =('id','matricula','paterno','materno','nombre','nombre_completo','rfc','curp','cuip','fec_nacimiento',
-					'cdu_estado_nac','cdu_municipio_nac','cdu_escolaridad','cdu_religion','cdu_seguridad_social',
+					'cdu_estado_nac','cdu_municipio_nac','cdu_estado_civil','cdu_escolaridad','cdu_religion','cdu_seguridad_social',
 					'id_seguridad_social','portacion',)
 	search_fields = ('matricula','paterno','materno','nombre') # Campos por los que se puede buscar, si son campos foraneos se usa campo__nomcampoforaneo
 	list_filter =('portacion',)

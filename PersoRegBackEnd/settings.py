@@ -26,6 +26,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = ('127.0.0.1', '192.168.0.14',)
+
+DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False,}
 
 # Application definition
 
@@ -36,8 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'easy_thumbnails',
     'debug_toolbar',
+    'easy_thumbnails',
     'sorl.thumbnail',
     'corsheaders',
     'mockups',
@@ -57,7 +60,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',    
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+
+
+
+
 
 ROOT_URLCONF = 'PersoRegBackEnd.urls'
 
