@@ -22,11 +22,11 @@ SECRET_KEY = '9c&&a(16barps*zub8!vw2th_)2jw^z&zpows-c+zyq@=(1f(6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 
-INTERNAL_IPS = ('127.0.0.1', '192.168.0.14',)
+INTERNAL_IPS = ('127.0.0.1', '192.168.122.1','192.168.0.10',)
 
 DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False,}
 
@@ -47,7 +47,9 @@ INSTALLED_APPS = (
     'rest_framework',
     'catalogos',
     'catalogos_detalle',
-    'personal'
+    'personal',
+    'empresas',
+    'subirf'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,7 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',    
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -65,7 +67,7 @@ MIDDLEWARE_CLASSES = (
 
 
 
-
+#X_FRAME_OPTIONS = 'DENY'
 
 ROOT_URLCONF = 'PersoRegBackEnd.urls'
 
@@ -86,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'personal',                      
-        'USER': 'raultr',
+        'USER': 'raultr-hp',
         'PASSWORD': 'rulo1000',
         'HOST': 'localhost'
     }
