@@ -6,3 +6,5 @@ Consultar Actividad de consultas de postgres:
 	SELECT datname,usename,client_addr,waiting,query FROM pg_stat_activity;
 
 	
+
+pg_dump -C personal | ssh raultr@104.236.232.238 "psql personal"

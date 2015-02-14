@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 
 class Empresa(models.Model):
-	id_empresa = models.IntegerField(unique=True)
+	cve_empresa = models.IntegerField(unique=True)
 	razon_social = models.CharField(max_length=150)
 	rfc = models.CharField(max_length=13)
 	calle = models.CharField(max_length=100)
@@ -22,7 +22,7 @@ class Empresa(models.Model):
 	telefono2 =models.CharField(max_length=10)
 	cdu_giro = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_giro',limit_choices_to={'catalogos': 18})
 	cdu_rubro = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_rubro',limit_choices_to={'catalogos': 19})
-	fecha_alta =models.DateField(auto_now_add = '01/01/1900')
+	fecha_alta =models.DateField(default = '1900-01-01')
 	
 
 	def str(self):
