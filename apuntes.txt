@@ -13,3 +13,9 @@ ver qe programa usa el puerto: sudo netstat -napt | grep 707
 - Para borrar de forma recursiva:
 	
 	find . -name '*.pyc' | xargs -n 1 git rm --cached
+
+Direccion servidor:
+	 ssh raultr@104.236.232.238
+
+Correr en segundo plano:
+	 python -m SimpleHTTPServer 8080 &
