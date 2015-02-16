@@ -8,10 +8,36 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
-from .serializers import PersonalSerializer
+from .serializers import PersonalSerializer,ImageSerializer
 from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
+from rest_framework import parsers
 from .models import Personal
 
+
+class ImageView(CreateAPIView):
+	model = Personal
+	serializer_class = ImageSerializer
+	parser_classes = (parsers.MultiPartParser,)
+	#parser_classes = (FileUploadParser,)
+
+	
+	def post(self, request, pk, format=None):
+		photo = request.FILES['imagen']
+		#id= Personal.objects.get(pk=pk)
+		profile = Personal.objects.get(id=pk)
+		profile.imagen = photo
+		profile.save()
+		#serializer = ImageSerializer(id,data=request.DATA)		
+		#personal = self.get_object(pk)
+		#personal.imagen = photo
+		#serializer.imagen = photo
+		#print serializer.imagen
+		#serializer.save()
+		data    = ImageSerializer(profile).data
+		return Response(data, status=status.HTTP_201_CREATED)
+		#parser_classes = (parsers.FileUploadParser,)
+		
 
 class PersonalOperaciones(APIView):	
 	def get_object(self, pk):

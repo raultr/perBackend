@@ -39,7 +39,7 @@ class Personal(models.Model):
 	cdu_estado_dom =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0140000',related_name='pesonal_cdu_estado',limit_choices_to={'catalogos': 14})
 	cdu_municipio_dom = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0150000',related_name='pesonal_cdu_municipio',limit_choices_to={'catalogos': 15})
 	ciudad_dom =models.CharField(max_length=100,default='')
-	
+	imagen = models.ImageField(upload_to='personal',default='' ,blank=True)
 
 
 #error_messages={'blank': 'INVALID!!11', 'null': 'NULL11!'})

@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from .models import Personal
 
+class ImageSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Personal
+		fields =('id','imagen',)
 
 class PersonalSerializer(serializers.ModelSerializer):
 	matricula = serializers.IntegerField(required=False)

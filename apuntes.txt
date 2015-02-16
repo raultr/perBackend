@@ -8,3 +8,8 @@ Consultar Actividad de consultas de postgres:
 	
 
 pg_dump -C personal | ssh raultr@104.236.232.238 "psql personal"
+ver qe programa usa el puerto: sudo netstat -napt | grep 707
+
+- Para borrar de forma recursiva:
+	
+	find . -name '*.pyc' | xargs -n 1 git rm --cached
