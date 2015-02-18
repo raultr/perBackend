@@ -13,7 +13,7 @@ class CatalogoAdmin(admin.ModelAdmin):
 	list_display = ('id','nombre','icono','icono_catalogo') # Campos que se mostraran en el administrador
 	list_filter = ('nombre',) # Campos por los que podemos filtrar en el administrador
 	search_fields = ('nombre',)
-	#inlines = [CatalogoInLine,] # Solo se admite un nivel de inline
+	inlines = [CatalogoInLine,] # Solo se admite un nivel de inline
 	# def thumb(self, obj):
 	# 	return render_to_string('catalogo_icono.html',{'image': obj.icono})
 

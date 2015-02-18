@@ -23,7 +23,8 @@ class Empresa(models.Model):
 	cdu_giro = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_giro',limit_choices_to={'catalogos': 18})
 	cdu_rubro = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_rubro',limit_choices_to={'catalogos': 19})
 	fecha_alta =models.DateField(default = '1900-01-01')
+	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=-99.1696000)
+	longitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)
 	
-
 	def str(self):
 		return self.razon_social
