@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^', include('catalogos_detalle.urls')),
     url(r'^', include('personal.urls')),
     url(r'^', include('empresas.urls')),
+    url(r'^', include('sucursales.urls')),
     url(r'^', include('subirf.urls')),
 )
 

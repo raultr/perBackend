@@ -28,3 +28,6 @@ class Empresa(models.Model):
 	
 	def str(self):
 		return self.razon_social
+
+	def __unicode__(self):
+		return '%s: %s' % (self.cve_empresa, self.razon_social)

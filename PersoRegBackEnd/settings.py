@@ -49,7 +49,8 @@ INSTALLED_APPS = (
     'catalogos_detalle',
     'personal',
     'empresas',
-    'subirf'
+    'sucursales',
+    'subirf',
 )
 
 MIDDLEWARE_CLASSES = (
