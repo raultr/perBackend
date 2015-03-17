@@ -47,7 +47,13 @@ class SucursalOperaciones(APIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	
+class SucursalesEmpresa(APIView):
+	def get(self,request,id_empresa,format=None):
+		sucursal = get_list_or_404(Sucursal, cve_empresa=id_empresa)
+		serializer = SucursalSerializer(sucursal,many=True)
+		
+		return Response(serializer.data)
+
 class SucursalBusqueda(APIView):
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)

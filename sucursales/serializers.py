@@ -8,7 +8,7 @@ class SucursalSerializer(serializers.ModelSerializer):
 	fecha_baja =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
 
 	def get_validation_exclusions(self, *args, **kwargs):
-		exclusions = super(EmpresaSerializer, self).get_validation_exclusions(*args, **kwargs)
+		exclusions = super(SucursalSerializer, self).get_validation_exclusions(*args, **kwargs)
 		return exclusions + ['cve_sucursal']
 
 	class Meta:
