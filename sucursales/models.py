@@ -22,8 +22,11 @@ class Sucursal(models.Model):
 	cdu_estatus = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estatus',limit_choices_to={'catalogos': 24})
 	fecha_alta =models.DateField(default = '1900-01-01')
 	fecha_baja =models.DateField(default = '1900-01-01')	
-	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=-99.1696000)
-	longitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)
+	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)
+	longitud = models.DecimalField(max_digits=12, decimal_places=7, default=-99.1696000)
 	
 	def str(self):
 		return self.nombre
+
+	def __unicode__(self):
+		return '(%d) %s' % (self.cve_sucursal,self.nombre)

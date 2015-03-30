@@ -50,10 +50,11 @@ class Personal(models.Model):
 	def str(self):
 		return self.paterno + ' ' + self.materno + ' ' + self.nombre
 	
-	def save(self, *args, **kwargs):
-		
-		#import ipdb; ipdb.set_trace()
-		
+
+	def __unicode__(self):
+		return '(%d) %s %s %s' % (self.matricula,self.paterno, self.materno,self.nombre)
+
+	def save(self, *args, **kwargs):	
 		super(Personal, self).save(*args, **kwargs)
 
 

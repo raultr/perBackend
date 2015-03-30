@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'personal',
     'empresas',
     'sucursales',
+    'personal_sucursales',
     'subirf',
 )
 

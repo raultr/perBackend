@@ -19,3 +19,10 @@ Direccion servidor:
 
 Correr en segundo plano:
 	 python -m SimpleHTTPServer 8080 &
+
+select setval('catalogos_catalogo_id_seq', 23
+       ); 
+
+
+Correr el servidor de html en segundo plano
+       nohup python -m SimpleHTTPServer 9045
