@@ -21,3 +21,4 @@ class PersonalSucursal(models.Model):
 
 	def activa(self):
 		return self.fecha_final =="1900-01-01"
+
