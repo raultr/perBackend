@@ -25,6 +25,6 @@ class PersonalSucursalOperaciones(APIView):
 			persuc = self.get_object(id_perso)
 			serializer = PersonalSucursalSerializer(persuc)
 			return Response(serializer.data)
-		persuc = PersonalSucursal.objects.all()
+		persuc = PersonalSucursal.objects.select_related()
 		serializer = PersonalSucursalSerializer(persuc, many=True)
 		return Response(serializer.data)
