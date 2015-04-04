@@ -16,7 +16,9 @@ from .models import PersonalSucursal
 class PersonalSucursalOperaciones(APIView):
 	def get_object(self, id_perso):
 		try:
-			return PersonalSucursal.objects.get(id_personal=id_perso)
+			return PersonalSucursal.objects.select_related('cdu_motivo').get(id_personal=id_perso)
+			#return PersonalSucursal.objects.select_related('id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango').get(id_personal=id_perso)
+			#values('id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo','fecha_inicial','fecha_final','motivo')
 		except PersonalSucursal.DoesNotExist:
 			raise Http404
 	
