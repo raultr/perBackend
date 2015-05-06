@@ -23,11 +23,10 @@ class PersonalSucursalSerializer(serializers.ModelSerializer):
 	#id_sucursal__nombre= serializers.PrimaryKeyRelatedField( queryset=Sucursal.objects.all(), source='id_sucursal')
 	#sucursal_id = serializers.PrimaryKeyRelatedField( queryset=Personal.objects.all(), source='id_personal')
 
-	def pre_save(self, obj):
-		import ipdb; ipdb.set_trace()
-		if 'id_sucursalId' in self.request.DATA:
-			 custom_target = self.request.DATA['id_sucursalId']
-			 self.request.DATA['id_sucursalId'] = custom_target['id']
+	# def pre_save(self, obj):
+	# 	if 'id_sucursalId' in self.request.DATA:
+	# 		 custom_target = self.request.DATA['id_sucursalId']
+	# 		 self.request.DATA['id_sucursalId'] = custom_target['id']
 
 	class Meta:
 		model = PersonalSucursal

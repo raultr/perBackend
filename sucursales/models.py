@@ -7,6 +7,7 @@ from catalogos_detalle.models import CatalogoDetalle
 from empresas.models import Empresa
 
 
+
 class Sucursal(models.Model):
 	cve_empresa = models.ForeignKey(Empresa, related_name='empresa_sucursal')
 	cve_sucursal= models.IntegerField(unique=True)
