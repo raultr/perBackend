@@ -6,9 +6,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from .serializers import CatalogoSerializer
 from .models import Catalogo
-	
-	
-	
+
+
 @api_view(['GET', 'POST'])
 def request_response_list(request):
 	if request.method == 'GET':

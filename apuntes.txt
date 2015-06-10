@@ -4,6 +4,10 @@ Reiniciar syslog:
 	sudo service rsyslog restart
 Consultar Actividad de consultas de postgres:
 	SELECT datname,usename,client_addr,waiting,query FROM pg_stat_activity;
+Reiniciar el identity en postgres
+	select setval('eventos_evento_id_seq', 1);
+	
+	
 
 	
 
@@ -18,7 +22,7 @@ Direccion servidor:
 	 ssh raultr@104.236.232.238
 
 Correr en segundo plano:
-	 python -m SimpleHTTPServer 8080 &
+	 python -m SimpleHTTPServer 8079.9 &
 
 select setval('catalogos_catalogo_id_seq', 23
        ); 
@@ -26,3 +30,38 @@ select setval('catalogos_catalogo_id_seq', 23
 
 Correr el servidor de html en segundo plano
        nohup python -m SimpleHTTPServer 9045
+
+-- Para la autorizacion en la cabecera siempre se debe de enviar el token
+
+Cabecera
+Authorization Token 266d6499e1f663995ccbf48c0106c2208a624bc6
+
+Exportar entorno virtual:
+		 pip freeze > requirements.txt
+		 pip install -r requirements.txt
+
+Cuando da el error de cors headers
+	pip install django-cors-headers p
+	y en los settings agregar:
+		CORS_ORIGIN_ALLOW_ALL = True
+
+
+Agregar en settings:
+	 'rest_framework.authtoken',
+En urls agregar
+	from rest_framework.authtoken import views
+	url(r'^api-token-auth/', views.obtain_auth_token),
+Agregar un views.py en la carpeta del proyecto
+
+En la urls agregar:
+	from pyeventos.views import AuthView,TacView
+
+Agregar un archivo custom_permissions.py en la carpeta del proyecto
+
+A las vistas que se quieran autentificar se agregara 
+	from rest_framework.authentication import TokenAuthentication
+	from rest_framework.permissions import IsAuthenticated
+y dentro de la clase:
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
+

@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework import parsers
 from .models import Personal
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class ImageView(CreateAPIView):
@@ -74,6 +76,9 @@ class PersonalOperaciones(APIView):
 
 	
 class PersonalBusqueda(APIView):
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
+	
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
 		#import ipdb; ipdb.set_trace()
