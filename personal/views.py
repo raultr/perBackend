@@ -19,8 +19,8 @@ from rest_framework.permissions import IsAuthenticated
 
 class ImageView(CreateAPIView):
 	model = Personal
-	serializer_class = ImageSerializer
-	parser_classes = (parsers.MultiPartParser,)
+	#serializer_class = ImageSerializer
+	#parser_classes = (parsers.MultiPartParser,)
 	#parser_classes = (FileUploadParser,)
 
 	
@@ -76,8 +76,8 @@ class PersonalOperaciones(APIView):
 
 	
 class PersonalBusqueda(APIView):
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	#authentication_classes = (TokenAuthentication,)
+	#permission_classes = (IsAuthenticated,)
 	
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
