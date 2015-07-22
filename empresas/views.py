@@ -10,11 +10,14 @@ from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
 from .serializers import EmpresaSerializer
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import Empresa
 
 
 class EmpresaOperaciones(APIView):
-
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get_object(self, pk):
 		try:
 			return Empresa.objects.get(pk=pk)
@@ -49,6 +52,8 @@ class EmpresaOperaciones(APIView):
 
 	
 class EmpresaBusqueda(APIView):
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
 		#import ipdb; ipdb.set_trace()

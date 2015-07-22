@@ -1,5 +1,8 @@
 from rest_framework import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Personal
+from rest_framework.response import Response
+from rest_framework import pagination
 
 class ImageSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -26,3 +29,7 @@ class PersonalSerializer(serializers.ModelSerializer):
 		read_only_fields =('imagen',)
 
 		#read_only_fields = ('matricula',)django "Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]"
+
+class PaginatedPersonalSerializer(pagination.PaginationSerializer):
+	class Meta:
+		object_serializer_class = PersonalSerializer

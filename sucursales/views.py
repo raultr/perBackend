@@ -10,11 +10,21 @@ from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
 from .serializers import SucursalSerializer
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import Sucursal
 
+class SucursalMenu(APIView):	
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
+	def get(self,request, pk=None, format=None):
+		#import ipdb;ipdb.set_trace();
+		data = {"sucursal":"Si"}
+		return Response(data,status=status.HTTP_201_CREATED)
 
 class SucursalOperaciones(APIView):
-
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get_object(self, pk):
 		try:
 			return Sucursal.objects.get(pk=pk)
@@ -48,6 +58,8 @@ class SucursalOperaciones(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SucursalesEmpresa(APIView):
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get(self,request,id_empresa,format=None):
 		sucursal = get_list_or_404(Sucursal, cve_empresa=id_empresa)
 		serializer = SucursalSerializer(sucursal,many=True)
@@ -55,6 +67,8 @@ class SucursalesEmpresa(APIView):
 		return Response(serializer.data)
 
 class SucursalBusqueda(APIView):
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
 		#import ipdb; ipdb.set_trace()

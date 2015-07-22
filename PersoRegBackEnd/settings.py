@@ -26,7 +26,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 
-INTERNAL_IPS = ('127.0.0.1', '192.168.122.1','192.168.0.10',)
+INTERNAL_IPS = ('127.0.0.1', '192.168.122.1','192.168.0.14',)
 
 DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False,}
 
@@ -56,6 +56,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,14 +66,9 @@ MIDDLEWARE_CLASSES = (
     #'django.middleware.clickjacking.XFrameOptionsMiddleware',    
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2
-}
-
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 #X_FRAME_OPTIONS = 'DENY'
 

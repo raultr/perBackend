@@ -12,10 +12,21 @@ from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
 from .serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSimple
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import PersonalSucursal
 
+class PersonalSucusalMenu(APIView):	
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
+	def get(self,request, pk=None, format=None):
+		#import ipdb;ipdb.set_trace();
+		data = {"personal_sucursal":"Si"}
+		return Response(data,status=status.HTTP_201_CREATED)
 
 class PersonalSucursalConsultas(APIView):
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get_object_persona_sucursal_activa(self, id_perso):
 		try:
 			return PersonalSucursal.objects.select_related('id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango').get(id_personal=id_perso,fecha_final="1900-01-01")
@@ -33,6 +44,8 @@ class PersonalSucursalConsultas(APIView):
 
 
 class PersonalSucursalOperaciones(APIView):
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (IsAuthenticated,)
 	def get_object_por_id(self, id):
 		try:
 			return PersonalSucursal.objects.select_related('id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango').get(id=id)
