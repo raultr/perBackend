@@ -1,15 +1,17 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from .serializers import CatalogoSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import CatalogoDetalle
 	
-
-	
 @api_view(['GET', 'POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def request_response_list(request,id_catalogo):
 	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':
@@ -18,6 +20,8 @@ def request_response_list(request,id_catalogo):
 		return Response(serializer.data)
 
 @api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def request_response_detalle(request,id_catalogo):
 	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':
@@ -27,8 +31,9 @@ def request_response_detalle(request,id_catalogo):
 		serializer = CatalogoSerializer(catalogo_detalle, many=True)
 		return Response(serializer.data)
 
-
 @api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def request_response_detalle_cdu_default(request,id_catalogo,cdu_default):
 	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':
@@ -39,8 +44,9 @@ def request_response_detalle_cdu_default(request,id_catalogo,cdu_default):
 		return Response(serializer.data)
 
 
-
 @api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def request_response_nuevo(request):
 	if request.method == 'POST':
 		serializer = CatalogoSerializer(data=request.DATA)

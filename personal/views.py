@@ -112,7 +112,7 @@ class PersonalBusqueda(APIView):
 		#serializer = PersonalSerializer(busqueda(valor_buscado), many=listado)
 		query = busqueda(valor_buscado)
 		if i>0:
-			paginator = Paginator(query, 2)
+			paginator = Paginator(query, 10)
 
 			page = request.QUERY_PARAMS.get('page')
 			try:
