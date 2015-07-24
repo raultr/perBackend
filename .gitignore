@@ -1,2 +1,9 @@
 *.pyc
 media/*
+catalogos/migrations/*
+catalogos_detalle/migrations/*
+empresas/migrations/*
+personal/migrations/*
+personal_sucursales/migrations/*
+sucursales//migrations/*
+
