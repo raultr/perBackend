@@ -65,3 +65,5 @@ y dentro de la clase:
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
 
+Como montar nginx:
+	https://fulljed123.wordpress.com/2014/01/29/django-con-nginx-gunicorn-virtualenv-supervisor-y-postgresql/

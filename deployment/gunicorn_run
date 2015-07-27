@@ -1,0 +1,29 @@
+#!/bin/bash
+
+NAME="PersoRegBackEnd" # Nombre de la aplicación
+DJANGODIR=/home/raultr-hp/proyectos/produccion/perBackend/ # Ubicación de donde esta tu proyecto django
+SOCKFILE=/home/raultr-hp/proyectos/produccion/perBackend/deployment/gunicorn.sock # Nos comunicaremos usando unix socket
+USER=raultr-hp # Usuario que tiene los superpoderes
+GROUP=raultr-hp # El grupo al que pertenece
+NUM_WORKERS=3 # Cuantos procesos debería trabajar Gunicorn spawn
+DJANGO_SETTINGS_MODULE=PersoRegBackEnd.settings # El archivo de configuración donde esta
+DJANGO_WSGI_MODULE=PersoRegBackEnd.wsgi # WSGI module name
+
+# Activamos el entorno virtual
+cd $DJANGODIR
+source /home/raultr-hp/proyectos/produccion/perBackend/env/bin/activate
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+# Creando el directorio run si por casualidad no existe.
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Corremos nuestra aplicación django
+# Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
+exec /home/raultr-hp/proyectos/produccion/perBackend/env/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user=$USER --group=$GROUP \
+--log-level=debug \
+--bind=unix:$SOCKFILE
