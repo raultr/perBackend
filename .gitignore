@@ -1,4 +1,5 @@
 *.pyc
+/**/*.pyc
 media/*
 catalogos/migrations/*
 catalogos_detalle/migrations/*

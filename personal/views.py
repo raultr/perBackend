@@ -22,16 +22,28 @@ class ImageView(CreateAPIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
 	model = Personal
+	EXTENCIONES_VALIDAS = [".jpg",".jpeg"]
+	VALID_IMAGE_MIMETYPES = ["image"]
 	#serializer_class = ImageSerializer
 	#parser_classes = (parsers.MultiPartParser,)
 	#parser_classes = (FileUploadParser,)
 
+	def valid_url_extension(self,archivo, extension_list=EXTENCIONES_VALIDAS):
+		return any([archivo.endswith(e) for e in extension_list])
 	
 	def post(self, request, pk, format=None):
 		photo = request.FILES['imagen']
+		if not(self.valid_url_extension(photo.name.lower())):
+			data ={"message":"El archivo no es una imagen"}
+			return Response(data,status=status.HTTP_403_FORBIDDEN)	
+		if(photo.size>1010661):
+			data ={"message":"La foto no debe de ser mayor a 1 mb"}
+			return Response(data,status=status.HTTP_403_FORBIDDEN)	
 		#id= Personal.objects.get(pk=pk)
 		profile = Personal.objects.get(id=pk)
+		photo.name = str(pk) + '.jpg'  #+ "." + photo.name.split(".")[1]
 		profile.imagen = photo
+		
 		profile.save()
 		#serializer = ImageSerializer(id,data=request.DATA)		
 		#personal = self.get_object(pk)
