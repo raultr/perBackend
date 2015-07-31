@@ -15,16 +15,16 @@ class CatalogoDetalle(models.Model):
 
 #Overriding
 	def save(self, *args, **kwargs):
+		if(self.pk == '0000000'):
+			#check if the row with this hash already exists.
+			lista = CatalogoDetalle.objects.filter(catalogos=self.catalogos).aggregate(ultimo=Max('num_dcatalogo'))
 		
-		#check if the row with this hash already exists.
-		lista = CatalogoDetalle.objects.filter(catalogos=self.catalogos).aggregate(ultimo=Max('num_dcatalogo'))
-		
-		self.num_dcatalogo = 0  if lista["ultimo"]==None else lista["ultimo"]+1
+			self.num_dcatalogo = 0  if lista["ultimo"]==None else lista["ultimo"]+1
 
-		#El cdu debe de ser 0010000
-		self.cdu_catalogo= str(self.catalogos.id).zfill(3) + str(self.num_dcatalogo).zfill(4)
+			#El cdu debe de ser 0010000
+			self.cdu_catalogo= str(self.catalogos.id).zfill(3) + str(self.num_dcatalogo).zfill(4)
 
-		#import ipdb; ipdb.set_trace()
+			#import ipdb; ipdb.set_trace()
 		
 		super(CatalogoDetalle, self).save(*args, **kwargs)
 

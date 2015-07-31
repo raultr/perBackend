@@ -15,6 +15,7 @@ from rest_framework import parsers
 from .models import Personal
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db import IntegrityError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -84,18 +85,22 @@ class PersonalOperaciones(APIView):
 	def post(self, request):
 		serializer = PersonalSerializer(data=request.DATA)
 		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
+			try:
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			except IntegrityError as e:
+				return Response({"La matricula ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 	def put(self, request, pk, format=None):
 		id = self.get_object(pk)
 		serializer = PersonalSerializer(id,data=request.DATA)
-		print "Estoy validando"
 		if serializer.is_valid():
-			print "ya valide"
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
+			try:
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			except IntegrityError as e:
+				return Response({"La matricula ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	

@@ -9,7 +9,7 @@ class EmpresaAdmin(admin.ModelAdmin):
 
 	search_fields = ('id_empresa','razon_social','rfc') # Campos por los que se puede buscar, si son campos foraneos se usa campo__nomcampoforaneo
 	list_filter =('cdu_giro','cdu_estado','cdu_municipio','cdu_rubro')
-	list_editable = ('razon_social',) # Hace el campo editable, (no debe ser el primer campo del list_display)
+	list_editable = ('razon_social','rfc') # Hace el campo editable, (no debe ser el primer campo del list_display)
 	raw_id_fields = ('cdu_estado',) # Para que me muestre solo el id y si queremos buscarlo por nombre nos pone una lupita
 	
 			
