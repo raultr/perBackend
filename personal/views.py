@@ -7,16 +7,20 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
+from django.db import transaction
 from django.db.models import Q
 from .serializers import PersonalSerializer,ImageSerializer,PaginatedPersonalSerializer
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework import parsers
 from .models import Personal
+from catalogos_detalle.models import CatalogoDetalle
+from personal_sucursales.models import PersonalSucursal
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 
 class ImageView(CreateAPIView):
@@ -44,7 +48,6 @@ class ImageView(CreateAPIView):
 		profile = Personal.objects.get(id=pk)
 		photo.name = str(pk) + '.jpg'  #+ "." + photo.name.split(".")[1]
 		profile.imagen = photo
-		
 		profile.save()
 		#serializer = ImageSerializer(id,data=request.DATA)		
 		#personal = self.get_object(pk)
@@ -82,14 +85,21 @@ class PersonalOperaciones(APIView):
 		serializer = PersonalSerializer(personal, many=True)
 		return Response(serializer.data)
 	
+	@transaction.atomic
 	def post(self, request):
 		serializer = PersonalSerializer(data=request.DATA)
 		if serializer.is_valid():
 			try:
-				serializer.save()
+				nuevaPersona = serializer.save()	
+				nuevaAsignacion =PersonalSucursal(id_personal_id=nuevaPersona.id, id_sucursal_id=1,cdu_motivo_id='0250000',
+					cdu_turno_id='0260000',cdu_puesto_id='0270000',cdu_rango_id='0280000',sueldo=0.0,fecha_inicial=nuevaPersona.fec_alta,motivo='')
+				nuevaAsignacion.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
 				return Response({"La matricula ya existe"}, status=status.HTTP_403_FORBIDDEN)
+			except Exception as e:
+				print e
+				return Response(e.message, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 	def put(self, request, pk, format=None):

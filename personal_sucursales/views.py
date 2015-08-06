@@ -16,6 +16,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import PersonalSucursal
 
+
 class PersonalSucusalMenu(APIView):	
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)

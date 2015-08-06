@@ -12,6 +12,7 @@ from .serializers import SucursalSerializer
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db import IntegrityError
 from .models import Sucursal
 
 class SucursalMenu(APIView):	
@@ -43,8 +44,11 @@ class SucursalOperaciones(APIView):
 	def post(self, request, format=None):
 		serializer = SucursalSerializer(data=request.DATA)
 		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
+			try:
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			except IntegrityError as e:
+				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 	def put(self, request, pk, format=None):
@@ -52,9 +56,11 @@ class SucursalOperaciones(APIView):
 		serializer = SucursalSerializer(id,data=request.DATA)
 		print "Estoy validando"
 		if serializer.is_valid():
-			print "ya valide"
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
+			try:
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			except IntegrityError as e:
+				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SucursalesEmpresa(APIView):
