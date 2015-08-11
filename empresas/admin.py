@@ -4,7 +4,7 @@ from .models import Empresa
 
 class EmpresaAdmin(admin.ModelAdmin):
 	list_display =('id','cve_empresa','razon_social','rfc','calle','numero','colonia','cp','cdu_estado','cdu_giro',
-				'cdu_municipio','ciudad','telefono1','telefono2','cdu_giro','cdu_rubro','fecha_alta',)
+				'cdu_municipio','telefono1','telefono2','cdu_giro','cdu_rubro','fecha_alta',)
 
 
 	search_fields = ('id_empresa','razon_social','rfc') # Campos por los que se puede buscar, si son campos foraneos se usa campo__nomcampoforaneo

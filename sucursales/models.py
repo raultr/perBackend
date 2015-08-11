@@ -18,7 +18,6 @@ class Sucursal(models.Model):
 	cp = models.CharField(max_length=10)
 	cdu_estado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estado',limit_choices_to={'catalogos': 14})
 	cdu_municipio = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_municipio',limit_choices_to={'catalogos': 15})
-	ciudad =models.CharField(max_length=100)
 	telefono =models.CharField(max_length=10)
 	cdu_estatus = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estatus',limit_choices_to={'catalogos': 24})
 	fecha_alta =models.DateField(default = '1900-01-01')

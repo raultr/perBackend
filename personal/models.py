@@ -23,7 +23,6 @@ class Personal(models.Model):
 	cdu_municipio_nac =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='pesonal_cdu_municipio_nac',limit_choices_to={'catalogos': 15})
 	cdu_estado_civil =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0010000',related_name='pesonal_cdu_estado_civil',limit_choices_to={'catalogos': 1})
 	cdu_escolaridad =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='pesonal_cdu_escolaridad',limit_choices_to={'catalogos': 2})
-	cdu_religion = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='pesonal_cdu_religion',limit_choices_to={'catalogos': 16})
 	cdu_seguridad_social = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='pesonal_cdu_seguridad_social',limit_choices_to={'catalogos': 17})
 	id_seguridad_social =models.CharField(max_length=20, blank=True)
 	portacion = models.BooleanField(default=False)
@@ -38,7 +37,6 @@ class Personal(models.Model):
 	cp_dom = models.CharField(max_length=10,default='')
 	cdu_estado_dom =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0140000',related_name='pesonal_cdu_estado',limit_choices_to={'catalogos': 14})
 	cdu_municipio_dom = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0150000',related_name='pesonal_cdu_municipio',limit_choices_to={'catalogos': 15})
-	ciudad_dom =models.CharField(max_length=100,default='')
 	imagen = models.ImageField(upload_to='personal',default='' ,blank=True)
 
 

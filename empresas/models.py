@@ -17,7 +17,6 @@ class Empresa(models.Model):
 	cp = models.CharField(max_length=10)
 	cdu_estado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_estado',limit_choices_to={'catalogos': 14})
 	cdu_municipio = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_municipio',limit_choices_to={'catalogos': 15})
-	ciudad =models.CharField(max_length=100)
 	telefono1 =models.CharField(max_length=10)
 	telefono2 =models.CharField(max_length=10,default='', blank=True)
 	cdu_giro = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_giro',limit_choices_to={'catalogos': 18})

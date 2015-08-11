@@ -4,7 +4,7 @@ from .models import Sucursal
 
 class SucursalAdmin(admin.ModelAdmin):
 	list_display =('id', 'cve_empresa','cve_sucursal','nombre','calle','numero','colonia','cp',	'cdu_estado','cdu_municipio',
-	               'ciudad','telefono',	'cdu_estatus', 'fecha_alta','fecha_baja','latitud','longitud', )
+	               'telefono',	'cdu_estatus', 'fecha_alta','fecha_baja','latitud','longitud', )
 
 
 
