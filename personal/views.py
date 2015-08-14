@@ -10,10 +10,12 @@ from rest_framework.parsers import FileUploadParser
 from django.db import transaction
 from django.db.models import Q
 from .serializers import PersonalSerializer,ImageSerializer,PaginatedPersonalSerializer
+from personal_sucursales.serializers import PersonalSucursalSerializerSimple
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework import parsers
 from .models import Personal
+from personal_sucursales.models import PersonalSucursal
 from catalogos_detalle.models import CatalogoDetalle
 from personal_sucursales.models import PersonalSucursal
 from rest_framework.authentication import TokenAuthentication
@@ -87,13 +89,23 @@ class PersonalOperaciones(APIView):
 	
 	@transaction.atomic
 	def post(self, request):
-		serializer = PersonalSerializer(data=request.DATA)
+		serializer = PersonalSerializer(data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
 				nuevaPersona = serializer.save()	
-				nuevaAsignacion =PersonalSucursal(id_personal_id=nuevaPersona.id, id_sucursal_id=1,cdu_motivo_id='0250000',
-					cdu_turno_id='0260000',cdu_puesto_id='0270000',cdu_rango_id='0280000',sueldo=0.0,fecha_inicial=nuevaPersona.fec_alta,motivo='')
-				nuevaAsignacion.save()
+				datos_asignacion = request.DATA['asignacion'][0]
+				datos_asignacion['id_personal'] =  nuevaPersona.id
+				datos_asignacion['cdu_motivo'] =  '0250000'
+				datos_asignacion['fecha_inicial'] = nuevaPersona.fec_alta
+				datos_asignacion['fecha_final'] = '01/01/1900'
+				datos_asignacion['motivo'] = "Alta del personal"
+				serializer_asignacion =PersonalSucursalSerializerSimple(data=datos_asignacion)			
+				if serializer_asignacion.is_valid():
+					print "es valido"
+					nuevaAsignacion= serializer_asignacion.save()
+				#nuevaAsignacion =PersonalSucursal(id_personal_id=nuevaPersona.id, id_sucursal_id=datos_asignacion["id_sucursal"],cdu_motivo_id='0250000',
+				#	cdu_turno_id='0260000',cdu_puesto_id='0270000',cdu_rango_id='0280000',sueldo=0.0,fecha_inicial=nuevaPersona.fec_alta,motivo='')
+				#nuevaAsignacion.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
 				return Response({"La matricula ya existe"}, status=status.HTTP_403_FORBIDDEN)
@@ -104,13 +116,16 @@ class PersonalOperaciones(APIView):
  
 	def put(self, request, pk, format=None):
 		id = self.get_object(pk)
-		serializer = PersonalSerializer(id,data=request.DATA)
+		serializer = PersonalSerializer(id,data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
 				return Response({"La matricula ya existe"}, status=status.HTTP_403_FORBIDDEN)
+			except Exception as e:
+				print e
+				return Response(e.message, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	
@@ -154,12 +169,37 @@ class PersonalBusqueda(APIView):
 			serializer = PaginatedPersonalSerializer(perso)
 			return Response(serializer.data['results'])
 		serializer = PersonalSerializer(query)
+		act =self.EstaActivo(serializer.data['id'])
+		estatus = ''
+		print act
+		if(act is None):
+			estatus ='Inactivo'
+		elif(act['cdu_motivo']=='0250003'):
+			estatus = 'Baja'
+		print estatus
+		serializer.data['estatus']=estatus
+		#'cdu_motivo' 0250000
+		#import ipdb;ipdb.set_trace()
+		#print(serializer.data['results'])
+		#return Response(query[0])
 		return Response(serializer.data)
-		
-		
+
+	def EstaActivo(self,id):
+		qs =PersonalSucursal.objects.filter(id_personal__id=id,fecha_final="1900-01-01")
+		if(len(qs)==0):
+			return None
+		serializer = PersonalSucursalSerializerSimple(qs[0])
+		return serializer.data		
 
 	def por_matricula(self,id_matricula):
 		return get_object_or_404(Personal, matricula=id_matricula)
+		#qs = Personal.objects.all()
+		#qs= Personal.objects.filter(Q(personalsucursal_id_personal__isnull=True) | Q(personalsucursal_id_personal__isnull=False), Q(personalsucursal_id_personal__fecha_final='1900-01-01') | Q(personalsucursal_id_personal__fecha_final__isnull=True),matricula=id_matricula)
+		#qs=Personal.objects.only('id','matricula','paterno','materno','nombre','rfc','curp','cuip','fec_nacimiento','cdu_estado_nac','cdu_municipio_nac','cdu_estado_civil','cdu_escolaridad','cdu_seguridad_social','id_seguridad_social','portacion','cdu_tipo_alta','fec_alta','condicionada','condiciones_alta','cdu_tipo_empleado','calle_dom','numero_dom','colonia_dom','cp_dom','cdu_estado_dom','cdu_municipio_dom','imagen').filter(Q(personalsucursal_id_personal__isnull=True) | Q(personalsucursal_id_personal__isnull=False), Q(personalsucursal_id_personal__fecha_final='1900-01-01') | Q(personalsucursal_id_personal__fecha_final__isnull=True),matricula=id_matricula).select_related('personalsucursal_id_personal')
+		#qs=Personal.objects.filter(Q(personalsucursal_id_personal__isnull=True) | Q(personalsucursal_id_personal__isnull=False), Q(personalsucursal_id_personal__fecha_final='1900-01-01') | Q(personalsucursal_id_personal__fecha_final__isnull=True),matricula=id_matricula).select_related('personalsucursal_id_personal').defer('personalsucursal_id_personal_cdu_turno')
+		#import ipdb;ipdb.set_trace()
+		#serializer = PersonalSerializer(qs[0])
+		#return qs
 	
 	def por_nombre(self,valor_buscado):
 		qs = Personal.objects.all()

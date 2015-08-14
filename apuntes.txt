@@ -11,7 +11,7 @@ Reiniciar el identity en postgres
 
 	
 
-pg_dump -C personal | ssh raultr@104.236.232.238 "psql personal"
+pg_dump -C personal | ssh raultr@104.131.161.180 "psql personal"
 ver qe programa usa el puerto: sudo netstat -napt | grep 7070
 
 - Para borrar de forma recursiva:
@@ -67,3 +67,13 @@ y dentro de la clase:
 
 Como montar nginx:
 	https://fulljed123.wordpress.com/2014/01/29/django-con-nginx-gunicorn-virtualenv-supervisor-y-postgresql/
+
+ORM Django:
+	qs= Personal.objects.filter(personalsucursal_id_personal__isnull=True)
+    print(qs.query)
+     qs= PersonalSucursal.objects.select_related('id_personal')
+
+     qs= Personal.objects.filter(personalsucursal_id_personal__isnull=True).values('personalsucursal_id_personal__cdu_motivo')
+
+
+SELECT "personal_sucursales_personalsucursal"."cdu_motivo_id" FROM "personal_personal" LEFT OUTER JOIN "personal_sucursales_personalsucursal" ON ( "personal_personal"."id" = "personal_sucursales_personalsucursal"."id_personal_id" ) WHERE "personal_sucursales_personalsucursal"."id" IS NULL
