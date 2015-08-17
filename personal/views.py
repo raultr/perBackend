@@ -92,6 +92,7 @@ class PersonalOperaciones(APIView):
 		serializer = PersonalSerializer(data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
+				sid = transaction.savepoint()
 				nuevaPersona = serializer.save()	
 				datos_asignacion = request.DATA['asignacion'][0]
 				datos_asignacion['id_personal'] =  nuevaPersona.id
@@ -101,21 +102,27 @@ class PersonalOperaciones(APIView):
 				datos_asignacion['motivo'] = "Alta del personal"
 				serializer_asignacion =PersonalSucursalSerializerSimple(data=datos_asignacion)			
 				if serializer_asignacion.is_valid():
-					print "es valido"
+					print "voy a guardar"
 					nuevaAsignacion= serializer_asignacion.save()
-				#nuevaAsignacion =PersonalSucursal(id_personal_id=nuevaPersona.id, id_sucursal_id=datos_asignacion["id_sucursal"],cdu_motivo_id='0250000',
-				#	cdu_turno_id='0260000',cdu_puesto_id='0270000',cdu_rango_id='0280000',sueldo=0.0,fecha_inicial=nuevaPersona.fec_alta,motivo='')
-				#nuevaAsignacion.save()
+				else:
+					print "no es valido"
+					transaction.savepoint_rollback(sid)
+					return Response(serializer_asignacion.errors, status=status.HTTP_403_FORBIDDEN)
+				transaction.savepoint_commit(sid)
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
+				print "error de IntegrityError"
+				transaction.savepoint_rollback(sid)
 				return Response({"La matricula ya existe"}, status=status.HTTP_403_FORBIDDEN)
 			except Exception as e:
-				print e
+				print "error de Exception"
+				transaction.savepoint_rollback(sid)
 				return Response(e.message, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 	def put(self, request, pk, format=None):
 		id = self.get_object(pk)
+		#import ipdb;ipdb.set_trace()
 		serializer = PersonalSerializer(id,data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:

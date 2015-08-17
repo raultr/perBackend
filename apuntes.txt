@@ -9,7 +9,7 @@ Reiniciar el identity en postgres
 	
 	
 
-	
+	, on_delete=models.PROTECT
 
 pg_dump -C personal | ssh raultr@104.131.161.180 "psql personal"
 ver qe programa usa el puerto: sudo netstat -napt | grep 7070

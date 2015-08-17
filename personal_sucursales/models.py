@@ -25,7 +25,7 @@ class PersonalSucursal(models.Model):
 	def activa(self):
 		return self.fecha_final =="1900-01-01"
 
-	#@transaction.atomic
+	@transaction.atomic
 	def save(self, *args, **kwargs):
 			self.validarFechas()
 			#falta validar que el elemento este activo y la sucursal este activa
@@ -33,12 +33,29 @@ class PersonalSucursal(models.Model):
 			PersonalSucursal.objects.filter(id_personal=self.id_personal, fecha_final="1900-01-01",fecha_inicial__lt=self.fecha_inicial).update(fecha_final=self.fecha_inicial)
 			super(PersonalSucursal, self).save(*args, **kwargs)
 
+	@transaction.atomic
+	def delete(self, *args, **kwargs):
+		self.validarEliminacion()
+		# Al eliminar una asignacion, a la asignacion anterior es la activa y se le asigna fec_inicial='01/01/1900' 
+		anterior = PersonalSucursal.objects.filter(id_personal=self.id_personal).exclude(id=self.id).order_by('id').reverse()[0]
+		PersonalSucursal.objects.filter(id = anterior.id).update(fecha_final="1900-01-01")
+		super(PersonalSucursal, self).delete(*args, **kwargs)
+
+	def validarEliminacion(self):
+		# Si solo hay una asignacion, no es posible eliminarla
+		cantidad = PersonalSucursal.objects.filter(id_personal=self.id_personal).count()
+		if(cantidad==1):
+			raise ValidationError('El elemento solo tiene una asignacion y no es posible eliminarla')
+		if (self.fecha_final.strftime("%d-%m-%Y") != "01-01-1900"):
+			raise ValidationError('Solo se pueden elimnar asignaciones activas')
+		return True
+
 	def validarFechas(self):
 		#import ipdb; ipdb.set_trace()
 		#Revisamos que no existan asignacion con una fecha mayor a la que queremos.
-		fecMayor=PersonalSucursal.objects.filter(id_personal=self.id_personal, fecha_final="1900-01-01",fecha_inicial__gte= self.fecha_inicial).count()
+		fecMayor=PersonalSucursal.objects.filter(id_personal=self.id_personal, fecha_inicial__gte= self.fecha_inicial).count()
 		if fecMayor>0:
-			raise ValidationError('La fecha de la asignación actual es mayor a la nueva fecha')
+			raise ValidationError('Ya existe una asignación mayor o igual a ' + self.fecha_inicial.strftime('%d/%m/%Y'))
 
 		#Revisamos que la asignacion no sea con los mismos datos que la actual
 		asignacionIgual=PersonalSucursal.objects.filter(id_personal=self.id_personal, fecha_final="1900-01-01",id_sucursal=self.id_sucursal,
