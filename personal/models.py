@@ -26,6 +26,7 @@ class Personal(models.Model):
 	cdu_escolaridad =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='pesonal_cdu_escolaridad',limit_choices_to={'catalogos': 2})
 	cdu_seguridad_social = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='pesonal_cdu_seguridad_social',limit_choices_to={'catalogos': 17})
 	id_seguridad_social =models.CharField(max_length=20, blank=True)
+	telefono = models.CharField(max_length=50, blank=True, default='')
 	portacion = models.BooleanField(default=False)
 	cdu_tipo_alta =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0200000',related_name='pesonal_cdu_tipo_alta',limit_choices_to={'catalogos': 20})
 	fec_alta=models.DateField(default = '1900-01-01')
