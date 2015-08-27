@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
-from .serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSimple
+from .serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSimple,PersonalSucursalSerializerPersonal
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -26,18 +26,28 @@ class PersonalSucusalMenu(APIView):
 		return Response(data,status=status.HTTP_201_CREATED)
 
 class PersonalSucursalConsultas(APIView):
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	#authentication_classes = (TokenAuthentication,)
+	#permission_classes = (IsAuthenticated,)
 	def get_object_persona_sucursal_activa(self, id_perso):
 		try:
 			return PersonalSucursal.objects.select_related('id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango').get(id_personal=id_perso,fecha_final="1900-01-01")
 		except PersonalSucursal.DoesNotExist:
 			raise Http404
+	def get_object_sucursal_personal_activo(self, id_sucursal):
+		try:
+			return PersonalSucursal.objects.select_related('id_personal').filter(id_sucursal__cve_sucursal=id_sucursal,fecha_final="1900-01-01")
+		except PersonalSucursal.DoesNotExist:
+			raise Http404
 
-	def get(self, request, id_perso=None, format=None):
+	def get(self, request, id_perso=None,id_sucursal=None, format=None):
+		#import ipdb;ipdb.set_trace()
 		if(id_perso!=None):
 			persuc = self.get_object_persona_sucursal_activa(id_perso)
 			serializer = PersonalSucursalSerializer(persuc)
+			return Response(serializer.data)
+		if(id_sucursal!=None):
+			sucpersonal = self.get_object_sucursal_personal_activo(id_sucursal)
+			serializer = PersonalSucursalSerializerPersonal(sucpersonal, many=True)
 			return Response(serializer.data)
 		persuc = PersonalSucursal.objects.select_related()
 		serializer = PersonalSucursalSerializer(persuc, many=True)

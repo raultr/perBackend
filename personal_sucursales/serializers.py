@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import PersonalSucursal
 from sucursales.models import Sucursal
+from personal.serializers import PersonalSerializer
 from catalogos_detalle.models import CatalogoDetalle
 from catalogos_detalle.serializers import CatalogoSerializer
 from sucursales.serializers import SucursalSerializer
@@ -40,3 +41,9 @@ class PersonalSucursalSerializerSimple(serializers.ModelSerializer):
 		model = PersonalSucursal
 		fields =('id','id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo',
 		 		'fecha_inicial','fecha_final','motivo',)
+
+class PersonalSucursalSerializerPersonal(serializers.ModelSerializer):
+	id_personal =PersonalSerializer(read_only=True, required= False)
+	class Meta:
+		model = PersonalSucursal
+		fields =('id','id_personal')
