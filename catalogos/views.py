@@ -26,3 +26,22 @@ def request_response_list(request):
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def request_response_list_editables(request):
+	if request.method == 'GET':
+		catalogos = Catalogo.objects.filter(editable = True)
+		#import ipdb; ipdb.set_trace()
+		serializer = CatalogoSerializer(catalogos, many=True)
+		return Response(serializer.data)
+	
+	elif request.method == 'POST':
+		#import ipdb; ipdb.set_trace()
+		#parser_classes = (FileUploadParser,)
+		#file_obj = request.FILES['icono']
+		serializer = CatalogoSerializer(data=request.DATA)
+		#import ipdb; ipdb.set_trace()
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

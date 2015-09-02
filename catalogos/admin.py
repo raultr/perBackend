@@ -10,10 +10,10 @@ class CatalogoInLine(admin.StackedInline): # No permite editar el catalogo_detal
 	extra = 1 # Solo un registro adicional para agregar
 
 class CatalogoAdmin(admin.ModelAdmin):
-	list_display = ('id','nombre','icono','icono_catalogo') # Campos que se mostraran en el administrador
-	list_filter = ('nombre',) # Campos por los que podemos filtrar en el administrador
+	list_display = ('id','nombre','editable','icono','icono_catalogo') # Campos que se mostraran en el administrador
+	list_filter = ('nombre','editable') # Campos por los que podemos filtrar en el administrador
 	search_fields = ('nombre',)
-	list_editable = ('nombre',)
+	list_editable = ('nombre','editable')
 	#inlines = [CatalogoInLine,] # Solo se admite un nivel de inline
 	# def thumb(self, obj):
 	# 	return render_to_string('catalogo_icono.html',{'image': obj.icono})
