@@ -63,6 +63,16 @@ class SucursalOperaciones(APIView):
 				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+	def delete(self, request, pk, format=None):
+		try:
+			Sucursal.objects.get(pk=pk).delete()
+			return Response({"Exito"}, status=status.HTTP_201_CREATED)
+		except ValidationError as e:
+				return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
+		except IntegrityError as e:
+				return Response({"No se puede eliminar una sucursal con elementos"}, status=status.HTTP_403_FORBIDDEN)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class SucursalesEmpresa(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
