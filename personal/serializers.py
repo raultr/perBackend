@@ -25,7 +25,7 @@ class PersonalSerializer(serializers.ModelSerializer):
 		fields =('id','paterno','matricula','materno','nombre','rfc','curp','cuip','fec_nacimiento',
 			'cdu_estado_nac','cdu_municipio_nac','cdu_genero','cdu_estado_civil','cdu_escolaridad',
 			 'cdu_seguridad_social','id_seguridad_social','telefono','portacion','cdu_tipo_alta','fec_alta','condicionada','condiciones_alta','cdu_tipo_empleado','calle_dom',
-					'numero_dom','colonia_dom','cp_dom','cdu_estado_dom','cdu_municipio_dom','imagen')
+					'numero_dom','numero_int_dom','colonia_dom','cp_dom','cdu_estado_dom','cdu_municipio_dom','imagen')
 		read_only_fields =('imagen',)
 
 		#read_only_fields = ('matricula',)django "Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]"

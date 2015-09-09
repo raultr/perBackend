@@ -20,8 +20,8 @@ def request_response_list(request,id_catalogo):
 		return Response(serializer.data)
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+#@authentication_classes((TokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
 def request_response_detalle(request,id_catalogo):
 	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':

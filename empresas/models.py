@@ -13,6 +13,7 @@ class Empresa(models.Model):
 	rfc = models.CharField(max_length=13)
 	calle = models.CharField(max_length=100)
 	numero = models.CharField(max_length=10)
+	numero_int =models.CharField(max_length=10,default='')
 	colonia = models.CharField(max_length=100)
 	cp = models.CharField(max_length=10)
 	cdu_estado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='empresa_cdu_estado',limit_choices_to={'catalogos': 14})

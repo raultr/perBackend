@@ -67,7 +67,7 @@ class SucursalesEmpresa(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
 	def get(self,request,id_empresa,format=None):
-		sucursal = get_list_or_404(Sucursal, cve_empresa=id_empresa)
+		sucursal = get_list_or_404(Sucursal.objects.order_by('cve_sucursal'), cve_empresa=id_empresa)
 		serializer = SucursalSerializer(sucursal,many=True)
 		
 		return Response(serializer.data)

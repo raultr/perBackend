@@ -13,5 +13,5 @@ class SucursalSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Sucursal
-		fields =('id', 'cve_empresa','cve_sucursal','nombre','calle','numero','colonia','cp',	'cdu_estado','cdu_municipio',
+		fields =('id', 'cve_empresa','cve_sucursal','nombre','calle','numero','numero_int','colonia','cp',	'cdu_estado','cdu_municipio',
 				'telefono',	'cdu_estatus', 'fecha_alta','fecha_baja','latitud','longitud', )
