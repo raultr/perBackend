@@ -35,7 +35,7 @@ class Personal(models.Model):
 	cdu_tipo_empleado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0210000',related_name='pesonal_tipo_empleado',limit_choices_to={'catalogos': 21})
 	calle_dom = models.CharField(max_length=100,default='')
 	numero_dom = models.CharField(max_length=10,default='')
-	numero_int_dom =models.CharField(max_length=10,default='')
+	numero_int_dom =models.CharField(max_length=10,default='',blank=True)
 	colonia_dom = models.CharField(max_length=100,default='')
 	cp_dom = models.CharField(max_length=10,default='')
 	cdu_estado_dom =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0140000',related_name='pesonal_cdu_estado',limit_choices_to={'catalogos': 14})

@@ -14,7 +14,7 @@ class Sucursal(models.Model):
 	nombre  = models.CharField(max_length=150)
 	calle = models.CharField(max_length=100)
 	numero = models.CharField(max_length=10)
-	numero_int =models.CharField(max_length=10,default='')
+	numero_int =models.CharField(max_length=10,default='', blank=True)
 	colonia = models.CharField(max_length=100)
 	cp = models.CharField(max_length=10)
 	cdu_estado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estado',limit_choices_to={'catalogos': 14})
