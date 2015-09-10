@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
+from django.db.models.deletion import ProtectedError
 from .models import Sucursal
 
 class SucursalMenu(APIView):	
@@ -54,7 +55,6 @@ class SucursalOperaciones(APIView):
 	def put(self, request, pk, format=None):
 		id = self.get_object(pk)
 		serializer = SucursalSerializer(id,data=request.DATA)
-		print "Estoy validando"
 		if serializer.is_valid():
 			try:
 				serializer.save()
@@ -67,10 +67,11 @@ class SucursalOperaciones(APIView):
 		try:
 			Sucursal.objects.get(pk=pk).delete()
 			return Response({"Exito"}, status=status.HTTP_201_CREATED)
-		except ValidationError as e:
-				return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
-		except IntegrityError as e:
-				return Response({"No se puede eliminar una sucursal con elementos"}, status=status.HTTP_403_FORBIDDEN)
+		except ProtectedError as e:
+				return Response({"Esta sucursal tiene asignaciones y no puede ser eliminada"}, status=status.HTTP_403_FORBIDDEN)
+		except Exception as e:
+				return Response( e.args[0], status=status.HTTP_400_BAD_REQUEST)
+
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SucursalesEmpresa(APIView):

@@ -2,6 +2,7 @@ import re
 from django.shortcuts import render, get_object_or_404, get_list_or_404 
 from django.http import Http404
 from django.db import connection
+from django.db.models.deletion import ProtectedError
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -60,6 +61,7 @@ class ImageView(CreateAPIView):
 		data    = ImageSerializer(profile).data
 		return Response(data, status=status.HTTP_201_CREATED)
 		#parser_classes = (parsers.FileUploadParser,)
+
 
 class PersonalMenu(APIView):	
 	authentication_classes = (TokenAuthentication,)
@@ -133,6 +135,17 @@ class PersonalOperaciones(APIView):
 			except Exception as e:
 				print e
 				return Response(e.message, status=status.HTTP_403_FORBIDDEN)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, pk, format=None):
+		try:
+			Personal.objects.get(pk=pk).delete()
+			return Response({"Exito"}, status=status.HTTP_201_CREATED)
+		except ProtectedError as e:
+				return Response({"Esta persona tiene asignaciones y no puede ser borrada"}, status=status.HTTP_403_FORBIDDEN)
+		except Exception as e:
+				return Response( e.args[0], status=status.HTTP_400_BAD_REQUEST)
+
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	

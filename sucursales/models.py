@@ -9,7 +9,7 @@ from empresas.models import Empresa
 
 
 class Sucursal(models.Model):
-	cve_empresa = models.ForeignKey(Empresa, related_name='empresa_sucursal')
+	cve_empresa = models.ForeignKey(Empresa, related_name='empresa_sucursal',on_delete = models.PROTECT)
 	cve_sucursal= models.IntegerField(unique=True)
 	nombre  = models.CharField(max_length=150)
 	calle = models.CharField(max_length=100)
@@ -17,10 +17,10 @@ class Sucursal(models.Model):
 	numero_int =models.CharField(max_length=10,default='', blank=True)
 	colonia = models.CharField(max_length=100)
 	cp = models.CharField(max_length=10)
-	cdu_estado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estado',limit_choices_to={'catalogos': 14})
-	cdu_municipio = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_municipio',limit_choices_to={'catalogos': 15})
+	cdu_estado =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estado',limit_choices_to={'catalogos': 14},on_delete = models.PROTECT)
+	cdu_municipio = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_municipio',limit_choices_to={'catalogos': 15},on_delete = models.PROTECT)
 	telefono =models.CharField(max_length=10)
-	cdu_estatus = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estatus',limit_choices_to={'catalogos': 24})
+	cdu_estatus = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name='sucursal_cdu_estatus',limit_choices_to={'catalogos': 24},on_delete = models.PROTECT)
 	fecha_alta =models.DateField(default = '1900-01-01')
 	fecha_baja =models.DateField(default = '1900-01-01')	
 	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)

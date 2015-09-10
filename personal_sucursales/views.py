@@ -14,6 +14,7 @@ from .serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSi
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.db.models.deletion import ProtectedError
 from .models import PersonalSucursal
 
 
@@ -87,4 +88,6 @@ class PersonalSucursalOperaciones(APIView):
 			return Response({"Exito"}, status=status.HTTP_201_CREATED)
 		except ValidationError as e:
 				return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
+		except ProtectedError as e:
+				return Response({"Esta sucursal tiene asignaciones y no puede ser eliminada"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
