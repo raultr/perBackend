@@ -28,7 +28,7 @@ class PersonalResource(resources.ModelResource):
 					'id_seguridad_social','telefono','portacion','tipo_alta','fec_alta','condicionada','condiciones_alta','tipo_empleado','calle_dom',
 					'numero_dom','numero_int_dom','colonia_dom','cp_dom','estado_dom','municipio_dom',)
 
-class PersonalAdmin2(ExportActionModelAdmin):
+class PersonalAdmin2(ImportExportModelAdmin):
 	resource_class = PersonalResource
 	list_display =('id','matricula','paterno','materno','nombre','nombre_completo','rfc','curp','cuip','fec_nacimiento',
 					'cdu_estado_nac','cdu_municipio_nac','cdu_genero','cdu_estado_civil','cdu_escolaridad','cdu_seguridad_social',
