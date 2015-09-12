@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'sorl.thumbnail',
     'corsheaders',
+    'import_export',
     'mockups',
     'rest_framework',
     'rest_framework.authtoken',
