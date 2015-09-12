@@ -21,6 +21,12 @@ class EmpresaResource(resources.ModelResource):
 
 class EmpresaAdmin2(ImportExportModelAdmin):
 	resource_class = EmpresaResource
+	
+	list_display =('id','cve_empresa','razon_social','rfc','calle','numero','numero_int','colonia','cp','cdu_estado','cdu_giro',
+				'cdu_municipio','telefono1','telefono2','cdu_rubro','fecha_alta',)
+	search_fields = ('id_empresa','razon_social','rfc') # Campos por los que se puede buscar, si son campos foraneos se usa campo__nomcampoforaneo
+	list_filter =('cdu_giro','cdu_estado','cdu_municipio','cdu_rubro')
+
 					
 class EmpresaAdmin(ImportExportModelAdmin):
 	list_display =('id','cve_empresa','razon_social','rfc','calle','numero','numero_int','colonia','cp','cdu_estado','cdu_giro',

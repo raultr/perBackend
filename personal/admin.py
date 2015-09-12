@@ -1,5 +1,5 @@
 from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin,ExportMixin,ExportActionModelAdmin
 from import_export import fields,resources
 from import_export.widgets import ForeignKeyWidget
 from catalogos_detalle.models import CatalogoDetalle
@@ -28,9 +28,15 @@ class PersonalResource(resources.ModelResource):
 					'id_seguridad_social','telefono','portacion','tipo_alta','fec_alta','condicionada','condiciones_alta','tipo_empleado','calle_dom',
 					'numero_dom','numero_int_dom','colonia_dom','cp_dom','estado_dom','municipio_dom',)
 
-class PersonalAdmin2(ImportExportModelAdmin):
+class PersonalAdmin2(ExportActionModelAdmin):
 	resource_class = PersonalResource
-					
+	list_display =('id','matricula','paterno','materno','nombre','nombre_completo','rfc','curp','cuip','fec_nacimiento',
+					'cdu_estado_nac','cdu_municipio_nac','cdu_genero','cdu_estado_civil','cdu_escolaridad','cdu_seguridad_social',
+					'id_seguridad_social','telefono','portacion','cdu_tipo_alta','fec_alta','condicionada','condiciones_alta','cdu_tipo_empleado','calle_dom',
+					'numero_dom','numero_int_dom','colonia_dom','cp_dom','cdu_estado_dom','cdu_municipio_dom',)
+	search_fields = ('matricula','paterno','materno','nombre') # Campos por los que se puede buscar, si son campos foraneos se usa campo__nomcampoforaneo
+	list_filter =('portacion',)
+				
 
 #class import_export.fields.Field(attribute=None, column_name=None, widget=None, readonly=False)
 class PersonalAdmin(ImportExportModelAdmin):
