@@ -35,41 +35,50 @@ DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False,}
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'debug_toolbar',
-    'easy_thumbnails',
-    'sorl.thumbnail',
-    'corsheaders',
-    'import_export',
-    'mockups',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'catalogos',
-    'catalogos_detalle',
-    'personal',
-    'empresas',
-    'sucursales',
-    'personal_sucursales',
-    'subirf',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'debug_toolbar',
+	'easy_thumbnails',
+	'sorl.thumbnail',
+	'corsheaders',
+	'import_export',
+	'mockups',
+	'rest_framework',
+	'rest_framework.authtoken',
+	'catalogos',
+	'catalogos_detalle',
+	'personal',
+	'empresas',
+	'sucursales',
+	'personal_sucursales',
+	'subirf',
 )
 
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    #'django.middleware.clickjacking.XFrameOptionsMiddleware',    
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+	'debug_toolbar.middleware.DebugToolbarMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	#'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+	'corsheaders.middleware.CorsMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'audit_log.middleware.UserLoggingMiddleware',
 )
+
+REST_FRAMEWORK = {
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework.authentication.TokenAuthentication',
+		'rest_framework.authentication.BasicAuthentication',
+		'rest_framework.authentication.SessionAuthentication',
+	)
+}
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
@@ -91,13 +100,13 @@ WSGI_APPLICATION = 'PersoRegBackEnd.wsgi.application'
 # }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'personal',                      
-        'USER': 'raultr-hp',
-        'PASSWORD': 'rulo1000',
-        'HOST': 'localhost'
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		'NAME': 'personal',                      
+		'USER': 'raultr-hp',
+		'PASSWORD': 'rulo1000',
+		'HOST': 'localhost'
+	}
 }
 
 # Internationalization
@@ -119,8 +128,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',)
+	'django.contrib.staticfiles.finders.FileSystemFinder',
+	'django.contrib.staticfiles.finders.AppDirectoriesFinder',)
 
 
 

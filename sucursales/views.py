@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from django.db.models.deletion import ProtectedError
 from .models import Sucursal
+from django.conf import settings
 
 class SucursalMenu(APIView):	
 	authentication_classes = (TokenAuthentication,)
@@ -27,6 +28,7 @@ class SucursalMenu(APIView):
 class SucursalOperaciones(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+
 	def get_object(self, pk):
 		try:
 			return Sucursal.objects.get(pk=pk)
@@ -41,12 +43,14 @@ class SucursalOperaciones(APIView):
 		sucursal = Sucursal.objects.all()
 		serializer = SucursalSerializer(sucursal, many=True)
 		return Response(serializer.data)
-
+	
 	def post(self, request, format=None):
 		serializer = SucursalSerializer(data=request.DATA)
 		if serializer.is_valid():
 			try:
+				#import ipdb;ipdb.set_trace();
 				serializer.save()
+
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
 				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
@@ -57,6 +61,7 @@ class SucursalOperaciones(APIView):
 		serializer = SucursalSerializer(id,data=request.DATA)
 		if serializer.is_valid():
 			try:
+				import ipdb;ipdb.set_trace();
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:

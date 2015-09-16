@@ -1,6 +1,8 @@
 from django.core.files import File
 import urllib
 from django.db import models
+from audit_log.models.fields import LastUserField
+from audit_log.models.managers import AuditLog
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from catalogos_detalle.models import CatalogoDetalle
@@ -25,6 +27,8 @@ class Sucursal(models.Model):
 	fecha_baja =models.DateField(default = '1900-01-01')	
 	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)
 	longitud = models.DecimalField(max_digits=12, decimal_places=7, default=-99.1696000)
+
+	audit_log = AuditLog()
 	
 	def str(self):
 		return self.nombre
