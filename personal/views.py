@@ -91,6 +91,7 @@ class PersonalOperaciones(APIView):
 	
 	@transaction.atomic
 	def post(self, request):
+		request.DATA['personal']['user'] =request.user.id
 		serializer = PersonalSerializer(data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
@@ -123,8 +124,8 @@ class PersonalOperaciones(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 	def put(self, request, pk, format=None):
+		request.DATA['personal']['user'] =request.user.id
 		id = self.get_object(pk)
-		#import ipdb;ipdb.set_trace()
 		serializer = PersonalSerializer(id,data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
@@ -137,9 +138,14 @@ class PersonalOperaciones(APIView):
 				return Response(e.message, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+	@transaction.atomic
 	def delete(self, request, pk, format=None):
 		try:
-			Personal.objects.get(pk=pk).delete()
+			per_del = Personal.objects.get(pk=pk)
+			per_del.user = request.user
+			per_del.save()
+			per_del.delete()
+			#Personal.objects.get(pk=pk).delete()
 			return Response({"Exito"}, status=status.HTTP_201_CREATED)
 		except ProtectedError as e:
 				return Response({"Esta persona tiene asignaciones y no puede ser borrada"}, status=status.HTTP_403_FORBIDDEN)

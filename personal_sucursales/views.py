@@ -70,6 +70,7 @@ class PersonalSucursalOperaciones(APIView):
 		return Response(serializer.data)
 
 	def post(self, request):
+		request.DATA['user'] =request.user.id
 		serializer = PersonalSucursalSerializerSimple(data=request.DATA)
 		#import ipdb; ipdb.set_trace()
 		if serializer.is_valid():	
@@ -82,9 +83,14 @@ class PersonalSucursalOperaciones(APIView):
 				return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+	@transaction.atomic
 	def delete(self, request, pk, format=None):
 		try:
-			PersonalSucursal.objects.get(pk=pk, fecha_final="1900-01-01").delete()
+			persuc_del = PersonalSucursal.objects.get(pk=pk, fecha_final="1900-01-01")
+			persuc_del.user = request.user
+			persuc_del.save()
+			persuc_del.delete()
+			#PersonalSucursal.objects.get(pk=pk, fecha_final="1900-01-01").delete()
 			return Response({"Exito"}, status=status.HTTP_201_CREATED)
 		except ValidationError as e:
 				return Response(e.message, status=status.HTTP_400_BAD_REQUEST)

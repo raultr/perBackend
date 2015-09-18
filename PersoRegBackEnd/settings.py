@@ -73,6 +73,9 @@ MIDDLEWARE_CLASSES = (
 )
 
 REST_FRAMEWORK = {
+ 	'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 		'rest_framework.authentication.TokenAuthentication',
 		'rest_framework.authentication.BasicAuthentication',
@@ -108,6 +111,8 @@ DATABASES = {
 		'HOST': 'localhost'
 	}
 }
+
+#AUTH_USER_MODEL = "accounts.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

@@ -19,15 +19,15 @@ from django.conf import settings
 
 class SucursalMenu(APIView):	
 	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated,)	
+
 	def get(self,request, pk=None, format=None):
-		#import ipdb;ipdb.set_trace();
 		data = {"sucursal":"Si"}
 		return Response(data,status=status.HTTP_201_CREATED)
 
 class SucursalOperaciones(APIView):
 	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated,)	
 
 	def get_object(self, pk):
 		try:
@@ -43,34 +43,41 @@ class SucursalOperaciones(APIView):
 		sucursal = Sucursal.objects.all()
 		serializer = SucursalSerializer(sucursal, many=True)
 		return Response(serializer.data)
-	
+		
 	def post(self, request, format=None):
+		#import ipdb;ipdb.set_trace()
+		request.DATA['user'] =request.user.id
 		serializer = SucursalSerializer(data=request.DATA)
 		if serializer.is_valid():
 			try:
-				#import ipdb;ipdb.set_trace();
 				serializer.save()
-
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
 				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
+			except Exception as e:
+				return Response( e.args[0], status=status.HTTP_400_BAD_REQUEST)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
+
 	def put(self, request, pk, format=None):
 		id = self.get_object(pk)
+		request.DATA['user'] =request.user.id
 		serializer = SucursalSerializer(id,data=request.DATA)
 		if serializer.is_valid():
 			try:
-				import ipdb;ipdb.set_trace();
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as e:
 				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+	@transaction.atomic
 	def delete(self, request, pk, format=None):
 		try:
-			Sucursal.objects.get(pk=pk).delete()
+			suc_del = Sucursal.objects.get(pk=pk)
+			suc_del.user = request.user
+			suc_del.save()
+			suc_del.delete()
+			#Sucursal.objects.get(pk=pk).delete()
 			return Response({"Exito"}, status=status.HTTP_201_CREATED)
 		except ProtectedError as e:
 				return Response({"Esta sucursal tiene asignaciones y no puede ser eliminada"}, status=status.HTTP_403_FORBIDDEN)
@@ -82,6 +89,7 @@ class SucursalOperaciones(APIView):
 class SucursalesEmpresa(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+
 	def get(self,request,id_empresa,format=None):
 		sucursal = get_list_or_404(Sucursal.objects.order_by('cve_sucursal'), cve_empresa=id_empresa)
 		serializer = SucursalSerializer(sucursal,many=True)
@@ -91,6 +99,7 @@ class SucursalesEmpresa(APIView):
 class SucursalBusqueda(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
 		#import ipdb; ipdb.set_trace()

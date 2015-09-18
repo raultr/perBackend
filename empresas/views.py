@@ -35,6 +35,7 @@ class EmpresaOperaciones(APIView):
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
+		request.DATA['user'] =request.user.id
 		serializer = EmpresaSerializer(data=request.DATA)
 		if serializer.is_valid():
 			try:
@@ -45,6 +46,7 @@ class EmpresaOperaciones(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	def put(self, request, pk, format=None):
+		request.DATA['user'] =request.user.id
 		id = self.get_object(pk)
 		serializer = EmpresaSerializer(id,data=request.DATA)
 		print "Estoy validando"

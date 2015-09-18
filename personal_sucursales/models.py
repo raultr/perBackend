@@ -2,6 +2,8 @@
 from django.core.exceptions import ValidationError
 import urllib
 from django.db import transaction
+from django.contrib.auth.models import User
+from audit_log.models.managers import AuditLog
 from django.db import models
 from catalogos_detalle.models import CatalogoDetalle
 from personal.models import Personal
@@ -18,6 +20,9 @@ class PersonalSucursal(models.Model):
 	fecha_inicial = models.DateField(default = '1900-01-01')
 	fecha_final = models.DateField(default = '1900-01-01')
 	motivo = models.CharField(max_length=100,blank=True)
+	user = models.OneToOneField(User,null=True)
+
+	audit_log = AuditLog()
 
 	def str(self):
 		return self.id_personal + " - " + self.id_sucursal 

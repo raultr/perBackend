@@ -1,6 +1,8 @@
 from django.core.files import File
 import urllib
 from django.db import models
+from django.contrib.auth.models import User
+from audit_log.models.managers import AuditLog
 from catalogos_detalle.models import CatalogoDetalle
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
@@ -41,7 +43,9 @@ class Personal(models.Model):
 	cdu_estado_dom =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0140000',related_name='pesonal_cdu_estado',limit_choices_to={'catalogos': 14}, on_delete=models.PROTECT)
 	cdu_municipio_dom = models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='0150000',related_name='pesonal_cdu_municipio',limit_choices_to={'catalogos': 15}, on_delete=models.PROTECT)
 	imagen = models.ImageField(upload_to='personal',default='' ,blank=True)
+	user = models.OneToOneField(User,null=True)
 
+	audit_log = AuditLog()
 
 #error_messages={'blank': 'INVALID!!11', 'null': 'NULL11!'})
 	@property
