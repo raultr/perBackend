@@ -66,11 +66,10 @@ class SucursalOperaciones(APIView):
 			try:
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
-			except IntegrityError as e:
+			except IntegrityErrotransactionr as e:
 				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	@transaction.atomic
 	def delete(self, request, pk, format=None):
 		try:
 			suc_del = Sucursal.objects.get(pk=pk)

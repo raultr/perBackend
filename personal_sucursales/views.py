@@ -21,6 +21,7 @@ from .models import PersonalSucursal
 class PersonalSucusalMenu(APIView):	
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+	
 	def get(self,request, pk=None, format=None):
 		#import ipdb;ipdb.set_trace();
 		data = {"personal_sucursal":"Si"}
@@ -58,6 +59,7 @@ class PersonalSucursalConsultas(APIView):
 class PersonalSucursalOperaciones(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+	
 	def get_object_por_id(self, id):
 		try:
 			return PersonalSucursal.objects.select_related('id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango').get(id=id)
@@ -83,12 +85,11 @@ class PersonalSucursalOperaciones(APIView):
 				return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	@transaction.atomic
 	def delete(self, request, pk, format=None):
 		try:
 			persuc_del = PersonalSucursal.objects.get(pk=pk, fecha_final="1900-01-01")
-			persuc_del.user = request.user
-			persuc_del.save()
+			#persuc_del.user = request.user
+			#persuc_del.save()
 			persuc_del.delete()
 			#PersonalSucursal.objects.get(pk=pk, fecha_final="1900-01-01").delete()
 			return Response({"Exito"}, status=status.HTTP_201_CREATED)

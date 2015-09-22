@@ -27,7 +27,7 @@ class Empresa(models.Model):
 	fecha_alta =models.DateField(default = '1900-01-01')
 	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=-99.1696000)
 	longitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)
-	user = models.OneToOneField(User,null=True)
+	user = models.ForeignKey(User,null=True)
 
 	audit_log = AuditLog()
 	
@@ -36,3 +36,9 @@ class Empresa(models.Model):
 
 	def __unicode__(self):
 		return '%s: %s' % (self.cve_empresa, self.razon_social)
+
+	def pre_save(self, obj):
+		if isinstance(self.request.user , User):   
+			setattr(obj, 'user', self.request.user)
+		else:
+			setattr(obj, 'user', None)  

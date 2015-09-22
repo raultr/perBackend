@@ -26,7 +26,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_CREDENTIALS = True
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -58,6 +58,17 @@ INSTALLED_APPS = (
 	'subirf',
 )
 
+REST_FRAMEWORK = {
+	'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework.authentication.TokenAuthentication',
+		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.BasicAuthentication',
+	)
+}
+
 MIDDLEWARE_CLASSES = (
 	'debug_toolbar.middleware.DebugToolbarMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
@@ -66,22 +77,13 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
-	#'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',    
 	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'audit_log.middleware.UserLoggingMiddleware',
 )
 
-REST_FRAMEWORK = {
- 	'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
-		'rest_framework.authentication.BasicAuthentication',
-		'rest_framework.authentication.SessionAuthentication',
-	)
-}
+
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 

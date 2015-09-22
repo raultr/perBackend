@@ -32,7 +32,7 @@ class PersonalSucursalSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = PersonalSucursal
 		fields =('id','id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo',
-		 		'fecha_inicial','fecha_final','motivo','id_sucursalId','cdu_motivo_id','cdu_turno_id','cdu_puesto_id','cdu_rango_id',)
+		 		'fecha_inicial','fecha_final','motivo','id_sucursalId','cdu_motivo_id','cdu_turno_id','cdu_puesto_id','cdu_rango_id','user',)
 
 class PersonalSucursalSerializerSimple(serializers.ModelSerializer):
 	fecha_inicial =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
@@ -40,7 +40,7 @@ class PersonalSucursalSerializerSimple(serializers.ModelSerializer):
 	class Meta:
 		model = PersonalSucursal
 		fields =('id','id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo',
-		 		'fecha_inicial','fecha_final','motivo',)
+		 		'fecha_inicial','fecha_final','motivo','user')
 
 class PersonalSucursalSerializerPersonal(serializers.ModelSerializer):
 	id_personal =PersonalSerializer(read_only=True, required= False)

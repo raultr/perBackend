@@ -20,7 +20,7 @@ class PersonalSucursal(models.Model):
 	fecha_inicial = models.DateField(default = '1900-01-01')
 	fecha_final = models.DateField(default = '1900-01-01')
 	motivo = models.CharField(max_length=100,blank=True)
-	user = models.OneToOneField(User,null=True)
+	user = models.ForeignKey(User,null=True)
 
 	audit_log = AuditLog()
 

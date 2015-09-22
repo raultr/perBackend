@@ -28,7 +28,7 @@ class Sucursal(models.Model):
 	fecha_baja =models.DateField(default = '1900-01-01')	
 	latitud = models.DecimalField(max_digits=12, decimal_places=7, default=19.5225000)
 	longitud = models.DecimalField(max_digits=12, decimal_places=7, default=-99.1696000)
-	user = models.OneToOneField(User,null=True)
+	user = models.ForeignKey(User,null=True)
 
 	audit_log = AuditLog()
 	

@@ -8,17 +8,22 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
-from .serializers import EmpresaSerializer
+from .serializers import EmpresaSerializer,PaginatedEmpresaSerializer
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication,SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from .models import Empresa
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class EmpresaOperaciones(APIView):
-	authentication_classes = (TokenAuthentication,)
+	authentication_classes = (TokenAuthentication,SessionAuthentication)
 	permission_classes = (IsAuthenticated,)
+	
+	def pre_save(self, obj):
+		obj.owner = self.request.user
+
 	def get_object(self, pk):
 		try:
 			return Empresa.objects.get(pk=pk)
@@ -61,6 +66,7 @@ class EmpresaOperaciones(APIView):
 class EmpresaBusqueda(APIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+	
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
 		#import ipdb; ipdb.set_trace()
@@ -78,8 +84,24 @@ class EmpresaBusqueda(APIView):
 			listado = True
 		# la posicion la funcion de busqueda que se utilizara
 		busqueda = funciones_busqueda[i]
+		query = busqueda(valor_buscado)
+		if i>0:
+			paginator = Paginator(query, 10)
 
-		serializer = EmpresaSerializer(busqueda(valor_buscado), many=listado)
+			page = request.QUERY_PARAMS.get('page')
+			try:
+				empr = paginator.page(page)
+			except PageNotAnInteger:
+				# If page is not an integer, deliver first page.
+				empr = paginator.page(1)
+			except EmptyPage:
+				# If page is out of range (e.g. 9999),
+				# deliver last page of results.
+				empr = paginator.page(paginator.num_pages)
+			serializer = PaginatedEmpresaSerializer(empr)
+			return Response(serializer.data['results'])
+
+		serializer = EmpresaSerializer(query)
 		return Response(serializer.data)
 
 	def por_cve_empresa(self,cve_empresa):
@@ -88,8 +110,7 @@ class EmpresaBusqueda(APIView):
 	def por_razon_social(self,valor_buscado):
 		qs = Empresa.objects.all()
 		qs = qs.filter(Q(razon_social__icontains = valor_buscado))
-		return get_list_or_404(qs)
+		return qs
 
 	def por_rfc(self,valor_buscado):
 		return get_list_or_404(Empresa,rfc__icontains = valor_buscado)
-

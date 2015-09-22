@@ -24,8 +24,6 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
-
 class ImageView(CreateAPIView):
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
@@ -66,6 +64,7 @@ class ImageView(CreateAPIView):
 class PersonalMenu(APIView):	
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+
 	def get(self,request, pk=None, format=None):
 		#import ipdb;ipdb.set_trace();
 		data = {"personal":"Si"}
@@ -74,6 +73,7 @@ class PersonalMenu(APIView):
 class PersonalOperaciones(APIView):	
 	authentication_classes = (TokenAuthentication,)
 	permission_classes = (IsAuthenticated,)
+
 	def get_object(self, pk):
 		try:
 			return Personal.objects.get(pk=pk)
@@ -91,7 +91,7 @@ class PersonalOperaciones(APIView):
 	
 	@transaction.atomic
 	def post(self, request):
-		request.DATA['personal']['user'] =request.user.id
+		request.DATA['personal'][0]['user'] =request.user.id
 		serializer = PersonalSerializer(data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
@@ -124,7 +124,7 @@ class PersonalOperaciones(APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
 	def put(self, request, pk, format=None):
-		request.DATA['personal']['user'] =request.user.id
+		request.DATA['personal'][0]['user'] =request.user.id
 		id = self.get_object(pk)
 		serializer = PersonalSerializer(id,data=request.DATA['personal'][0])
 		if serializer.is_valid():
@@ -138,7 +138,6 @@ class PersonalOperaciones(APIView):
 				return Response(e.message, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	@transaction.atomic
 	def delete(self, request, pk, format=None):
 		try:
 			per_del = Personal.objects.get(pk=pk)

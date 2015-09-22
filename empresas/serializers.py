@@ -1,5 +1,7 @@
 from rest_framework import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Empresa
+from rest_framework import pagination
 
 
 class EmpresaSerializer(serializers.ModelSerializer):
@@ -13,4 +15,9 @@ class EmpresaSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Empresa
 		fields = ('id','cve_empresa','razon_social','rfc','calle','numero','numero_int','colonia','cp','cdu_estado','cdu_giro',
-				'cdu_municipio','telefono1','telefono2','cdu_giro','cdu_rubro','fecha_alta','latitud','longitud',)					
+				'cdu_municipio','telefono1','telefono2','cdu_giro','cdu_rubro','fecha_alta','latitud','longitud','user',)					
+	
+
+class PaginatedEmpresaSerializer(pagination.PaginationSerializer):
+	class Meta:
+		object_serializer_class = EmpresaSerializer
