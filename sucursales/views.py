@@ -66,7 +66,7 @@ class SucursalOperaciones(APIView):
 			try:
 				serializer.save()
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
-			except IntegrityErrotransactionr as e:
+			except IntegrityErrotransaction as e:
 				return Response({"La clave de sucursal ya existe"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

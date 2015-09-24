@@ -160,7 +160,6 @@ class PersonalBusqueda(APIView):
 	
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
-		#import ipdb; ipdb.set_trace()
 		# Tupla de funciones de busqueda
 		funciones_busqueda=(self.por_matricula,self.por_nombre,self.por_rfc)
 		# La expresion regular esta relacionada una una con la tupla de campos
@@ -175,7 +174,7 @@ class PersonalBusqueda(APIView):
 			listado = True
 		# la posicion la funcion de busqueda que se utilizara
 		busqueda = funciones_busqueda[i]
-
+		#import ipdb; ipdb.set_trace()
 		#serializer = PersonalSerializer(busqueda(valor_buscado), many=listado)
 		query = busqueda(valor_buscado)
 		if i>0:
