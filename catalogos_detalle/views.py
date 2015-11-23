@@ -19,7 +19,7 @@ def request_response_list(request,id_catalogo):
 		serializer = CatalogoSerializer(catalogo_detalle, many=True)
 		return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET','PUT','POST'])
 #@authentication_classes((TokenAuthentication,))
 #@permission_classes((IsAuthenticated,))
 def request_response_detalle(request,id_catalogo):
@@ -30,8 +30,22 @@ def request_response_detalle(request,id_catalogo):
 		#catalogo_detalle= get_list_or_404(CatalogoDetalle, catalogos=[1,12,3])
 		serializer = CatalogoSerializer(catalogo_detalle, many=True)
 		return Response(serializer.data)
+	if request.method == 'PUT':
+		id = CatalogoDetalle.objects.get(pk=id_catalogo)
+		serializer = CatalogoSerializer(id,data=request.DATA)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	if request.method == 'POST':
+		serializer = CatalogoSerializer(data=request.DATA)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+
+@api_view(['GET','PUT'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def request_response_detalle_cdu_default(request,id_catalogo,cdu_default):

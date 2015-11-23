@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
-from .serializers import EmpresaSerializer,PaginatedEmpresaSerializer
+from .serializers import EmpresaSerializer,PaginatedEmpresaSerializer,EmpresaRelacionSerializer
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication,SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -114,3 +114,11 @@ class EmpresaBusqueda(APIView):
 
 	def por_rfc(self,valor_buscado):
 		return get_list_or_404(Empresa,rfc__icontains = valor_buscado)
+
+class EmpresaReportes(APIView):
+	def get(self, request, pk=None, format=None):
+		empresa = Empresa.objects.all()
+		
+		serializer = EmpresaRelacionSerializer(empresa, many=True)
+		
+		return Response(serializer.data)

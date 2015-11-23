@@ -92,17 +92,20 @@ class PersonalOperaciones(APIView):
 	@transaction.atomic
 	def post(self, request):
 		request.DATA['personal'][0]['user'] =request.user.id
+		request.DATA['user'] =request.user.id
 		serializer = PersonalSerializer(data=request.DATA['personal'][0])
 		if serializer.is_valid():
 			try:
 				sid = transaction.savepoint()
 				nuevaPersona = serializer.save()	
+				#import ipdb;ipdb.set_trace();
 				datos_asignacion = request.DATA['asignacion'][0]
 				datos_asignacion['id_personal'] =  nuevaPersona.id
 				datos_asignacion['cdu_motivo'] =  '0250000'
 				datos_asignacion['fecha_inicial'] = nuevaPersona.fec_alta
 				datos_asignacion['fecha_final'] = '01/01/1900'
 				datos_asignacion['motivo'] = "Alta del personal"
+				datos_asignacion['user'] =request.user.id
 				serializer_asignacion =PersonalSucursalSerializerSimple(data=datos_asignacion)			
 				if serializer_asignacion.is_valid():
 					print "voy a guardar"

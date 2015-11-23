@@ -45,3 +45,11 @@ def request_response_list_editables(request):
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def request_response_list2(request,pk):
+	if request.method == 'GET':
+		catalogos = Catalogo.objects.select_related(None).filter(id=pk)
+		#import ipdb; ipdb.set_trace()
+		serializer = CatalogoSerializer(catalogos, many=True)
+		return Response(serializer.data)

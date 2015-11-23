@@ -10,7 +10,7 @@ from personal.models import Personal
 from sucursales.models import Sucursal
 
 class PersonalSucursal(models.Model):
-	id_personal = models.ForeignKey(Personal,related_name='personalsucursal_id_personal', on_delete=models.PROTECT)
+	id_personal = models.ForeignKey(Personal,related_name='personalsucursal_id_personal', on_delete=models.PROTECT,null=True)
 	id_sucursal = models.ForeignKey(Sucursal,related_name='personalsucursal_id_sucursal', on_delete=models.PROTECT)
 	cdu_motivo =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name=' personalsucursal_cdu_motivo',limit_choices_to={'catalogos': 25}, on_delete=models.PROTECT)
 	cdu_turno =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name=' personalsucursal_cdu_turno',limit_choices_to={'catalogos': 26}, on_delete=models.PROTECT)

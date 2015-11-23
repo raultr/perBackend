@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Empresa
 from rest_framework import pagination
+from sucursales.serializers import SucursalSerializer
+from personal_sucursales.serializers import PersonalSucursalSerializerSimple
 
 
 class EmpresaSerializer(serializers.ModelSerializer):
@@ -21,3 +23,11 @@ class EmpresaSerializer(serializers.ModelSerializer):
 class PaginatedEmpresaSerializer(pagination.PaginationSerializer):
 	class Meta:
 		object_serializer_class = EmpresaSerializer
+
+
+class EmpresaRelacionSerializer(serializers.ModelSerializer):
+		#empresa_sucursal = serializers.RelatedField(many=True)
+		empresa_sucursal = SucursalSerializer(many=True, read_only=True)
+		class Meta:
+			model = Empresa
+			fields = ('id','cve_empresa','razon_social','empresa_sucursal')

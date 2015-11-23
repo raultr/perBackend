@@ -10,5 +10,7 @@ urlpatterns = patterns('personal_sucursales.views',
 	 url(r'^sucursal/(?P<id_sucursal>[0-9]+)/personal/activo/$',views.PersonalSucursalConsultas.as_view(), name='personal_sucursales_consulta'), 
  	 #url(r'^personal_sucursales/$',views.PersonalSucursalView.as_view({'get': 'list',    'post': 'create'}), name='personal_sucursales_view'),
  	 url(r'^personal_sucursales/asignacion/(?P<pk>[0-9]+)/$',views.PersonalSucursalOperaciones.as_view(), name='personal_sucursales_view'),
+	 url(r'^personal_sucursales/activos/empresa/(?P<id_empresa>[0-9,]+)/$',views.PersonalSucursalReportes.as_view(), name='personal_sucursales_reporte'), 
+
  	 url(r'^personal_sucursales/$',views.PersonalSucursalOperaciones.as_view(), name='personal_sucursales_view'),)
 

@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 import re
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, get_object_or_404, get_list_or_404 
 from django.http import Http404
@@ -98,3 +100,13 @@ class PersonalSucursalOperaciones(APIView):
 		except ProtectedError as e:
 				return Response({"Esta sucursal tiene asignaciones y no puede ser eliminada"}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PersonalSucursalReportes(APIView):
+	def get(self, request,id_empresa):
+		listado = id_empresa.split(',')
+		queryset = PersonalSucursal.objects.values('id','sueldo','id_personal','id_personal__matricula','id_personal__nombre','id_personal__paterno','id_personal__materno',
+												'id_sucursal__cve_empresa','id_sucursal__cve_empresa__cve_empresa','id_sucursal__cve_empresa__razon_social',
+												'id_sucursal__id','id_sucursal__cve_sucursal','id_sucursal__nombre','cdu_puesto','cdu_puesto__descripcion1',
+												'cdu_rango__descripcion1','cdu_turno__descripcion1',).select_related().filter(id_sucursal__cve_empresa__in=listado, fecha_final="1900-01-01")
+		serialized = json.dumps(list(queryset), cls=DjangoJSONEncoder)#DjangoJSONEncoder para que se lleve bien con fechas y decimales
+		return Response(list(queryset))
