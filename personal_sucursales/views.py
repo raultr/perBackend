@@ -107,6 +107,6 @@ class PersonalSucursalReportes(APIView):
 		queryset = PersonalSucursal.objects.values('id','sueldo','id_personal','id_personal__matricula','id_personal__nombre','id_personal__paterno','id_personal__materno',
 												'id_sucursal__cve_empresa','id_sucursal__cve_empresa__cve_empresa','id_sucursal__cve_empresa__razon_social',
 												'id_sucursal__id','id_sucursal__cve_sucursal','id_sucursal__nombre','cdu_puesto','cdu_puesto__descripcion1',
-												'cdu_rango__descripcion1','cdu_turno__descripcion1',).select_related().filter(id_sucursal__cve_empresa__in=listado, fecha_final="1900-01-01")
+												'cdu_rango__descripcion1','cdu_turno__descripcion1','cdu_motivo','cdu_motivo__descripcion1').select_related().filter(id_sucursal__cve_empresa__in=listado, fecha_final="1900-01-01")
 		serialized = json.dumps(list(queryset), cls=DjangoJSONEncoder)#DjangoJSONEncoder para que se lleve bien con fechas y decimales
 		return Response(list(queryset))
