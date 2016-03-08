@@ -6,5 +6,5 @@ catalogos_detalle/migrations/*
 empresas/migrations/*
 personal/migrations/*
 personal_sucursales/migrations/*
-sucursales//migrations/*
+sucursales/migrations/*
 
