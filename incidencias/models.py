@@ -15,4 +15,4 @@ class Incidencia(models.Model):
 	observaciones = models.CharField(max_length=200,blank=True)
 
 	class Meta:
-		unique_together = ('id_personal', 'fecha','cdu_concepto_incidencia')
+		unique_together = ('id_personal', 'fecha',)
