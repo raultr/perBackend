@@ -14,7 +14,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
 import datetime
-from .serializers import IncidenciaSerializer
+from .serializers import IncidenciaSerializer,IncidenciaRelacionSerializer
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -93,3 +93,33 @@ class IncidenciaPersonalFecha(APIView):
 		incide = self.get_object_por_id(id_perso,fecha_incide)
 		serializer = IncidenciaSerializer(incide, many=True)
 		return Response(serializer.data)
+
+class IncidenciaConsulta(APIView):
+	#authentication_classes = (TokenAuthentication,)
+	#permission_classes = (IsAuthenticated,)
+	
+	def get_object_por_id(self, pk):
+		try:
+			return Incidencia.objects.select_related('cdu_concepto_incidencia','id_personal').filter(id=pk)
+		except Incidencia.DoesNotExist:
+			raise Http404
+
+	def get(self, request):
+		fecha_ini =datetime.datetime.strptime(request.GET['fecha_ini'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		fecha_fin =datetime.datetime.strptime(request.GET['fecha_fin'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		try:
+			incide = Incidencia.objects.select_related('cdu_concepto_incidencia','id_personal').filter(fecha__gte=fecha_ini,fecha__lte=fecha_fin).order_by('fecha','id_personal__paterno')
+			serializer = IncidenciaRelacionSerializer(incide, many=True)
+			return Response(serializer.data)
+		except Incidencia.DoesNotExist:
+			raise Http404
+
+
+		#serializer = IncidenciaSerializer(incide, many=True)
+		#return Response(serializer.data)
+		return Response(fecha_ini + ' : ' + fecha_fin)
+
+#def viewname(request):
+#    price_lte = request.GET['price_lte']
+#    #Code to filter products whose price is less than price_lte i.e. 5000
+# http://localhost:8001/incidencias/consulta/?fecha_ini=01/01/2016&fecha_fin=01/01/2016
