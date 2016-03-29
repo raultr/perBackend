@@ -12,7 +12,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
-from django.db.models import Q
+from django.db.models import F,Q
+from datetime import datetime, date
 import datetime
 from .serializers import IncidenciaSerializer,IncidenciaRelacionSerializer
 from rest_framework.views import APIView
@@ -107,10 +108,31 @@ class IncidenciaConsulta(APIView):
 	def get(self, request):
 		fecha_ini =datetime.datetime.strptime(request.GET['fecha_ini'],'%d/%m/%Y').strftime('%Y-%m-%d')
 		fecha_fin =datetime.datetime.strptime(request.GET['fecha_fin'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		fecha_activa = date(1900,1,1)
 		try:
-			incide = Incidencia.objects.select_related('cdu_concepto_incidencia','id_personal').filter(fecha__gte=fecha_ini,fecha__lte=fecha_fin).order_by('fecha','id_personal__paterno')
-			serializer = IncidenciaRelacionSerializer(incide, many=True)
-			return Response(serializer.data)
+			q = Incidencia.objects.all()
+			q = q.filter(Q(fecha__gte=fecha_ini,fecha__lte=fecha_fin), 
+							Q(fecha__gte= F('id_personal__personalsucursal_id_personal__fecha_inicial'),fecha__lt= F('id_personal__personalsucursal_id_personal__fecha_final'))
+							| Q(fecha__gte= F('id_personal__personalsucursal_id_personal__fecha_inicial') ,id_personal__personalsucursal_id_personal__fecha_final=fecha_activa)
+							).values('id','id_personal__matricula','id_personal__paterno','id_personal__materno','id_personal__nombre',
+							'fecha','observaciones','cdu_concepto_incidencia','cdu_concepto_incidencia__descripcion1',
+							'id_personal__personalsucursal_id_personal__cdu_turno','id_personal__personalsucursal_id_personal__cdu_turno__descripcion1',
+							'id_personal__personalsucursal_id_personal__cdu_puesto','id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1',
+							'id_personal__personalsucursal_id_personal__id_sucursal','id_personal__personalsucursal_id_personal__id_sucursal__nombre')
+
+			columnas = {'id':'id','id_personal__matricula':'matricula','id_personal__paterno':'paterno',
+						'id_personal__materno':'materno','id_personal__nombre':'nombre',
+						'fecha':'fecha','observaciones':'observaciones',
+						'cdu_concepto_incidencia':'cdu_incidencia','cdu_concepto_incidencia__descripcion1':'incidencia',
+						'id_personal__personalsucursal_id_personal__cdu_turno':'cdu_turno','id_personal__personalsucursal_id_personal__cdu_turno__descripcion1':'turno',
+						'id_personal__personalsucursal_id_personal__cdu_puesto':'cdu_puesto','id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1':'puesto',
+						'id_personal__personalsucursal_id_personal__id_sucursal':'id_sucursal','id_personal__personalsucursal_id_personal__id_sucursal__nombre':'sucursal'}
+
+			reporte = []
+			for diccionario in q:
+				reporte.append(dict((columnas[key], value) for (key, value) in diccionario.items()))
+
+			return Response(reporte)
 		except Incidencia.DoesNotExist:
 			raise Http404
 
@@ -123,3 +145,4 @@ class IncidenciaConsulta(APIView):
 #    price_lte = request.GET['price_lte']
 #    #Code to filter products whose price is less than price_lte i.e. 5000
 # http://localhost:8001/incidencias/consulta/?fecha_ini=01/01/2016&fecha_fin=01/01/2016
+# http://localhost:8001/incidencias/consulta/?fecha_ini=18/03/2016&fecha_fin=19/03/2016
