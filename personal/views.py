@@ -11,7 +11,7 @@ from rest_framework.parsers import FileUploadParser
 from django.db import transaction
 from django.db.models import Q
 from .serializers import PersonalSerializer,ImageSerializer,PaginatedPersonalSerializer
-from personal_sucursales.serializers import PersonalSucursalSerializerSimple
+from personal_sucursales.serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSimple
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework import parsers
@@ -201,12 +201,24 @@ class PersonalBusqueda(APIView):
 		print act
 		if(act is None):
 			estatus ='Inactivo'
-		elif(act['cdu_motivo']=='0250003'):
+		elif(act['cdu_motivo']['cdu_catalogo']=='0250003'):
 			estatus = 'Baja'
 		print estatus
-		serializer.data['estatus']=estatus
-		#'cdu_motivo' 0250000
+		
+		#act['id_sucursal']['nombre']
+		#act['cdu_motivo']['cdu_catalogo']
+		#act['cdu_motivo']['descripcion1']
+		#act['cdu_puesto']['descripcion1']
+		#act['cdu_rango']['descripcion1']
+
+
+		serializer.data['estatus']  = estatus
+		serializer.data["sucursal"] = act['id_sucursal']['nombre']
+		serializer.data["motivo"  ] = act['cdu_motivo']['descripcion1']
+		serializer.data["puesto"]   = act['cdu_puesto']['descripcion1']
+		serializer.data["rango"]    = act['cdu_rango']['descripcion1']
 		#import ipdb;ipdb.set_trace()
+		#'cdu_motivo' 0250000
 		#print(serializer.data['results'])
 		#return Response(query[0])
 		return Response(serializer.data)
@@ -215,7 +227,7 @@ class PersonalBusqueda(APIView):
 		qs =PersonalSucursal.objects.filter(id_personal__id=id,fecha_final="1900-01-01")
 		if(len(qs)==0):
 			return None
-		serializer = PersonalSucursalSerializerSimple(qs[0])
+		serializer = PersonalSucursalSerializer(qs[0])
 		return serializer.data		
 
 	def por_matricula(self,id_matricula):

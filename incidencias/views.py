@@ -21,6 +21,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db.models.deletion import ProtectedError
 from .models import Incidencia
+from personal_sucursales.models import PersonalSucursal
 
 class IncidenciaNueva(APIView):
 	#authentication_classes = (TokenAuthentication,)
@@ -31,7 +32,30 @@ class IncidenciaNueva(APIView):
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
-		serializer = IncidenciaSerializer(data=request.DATA)
+		datos = request.DATA
+		fecha = datetime.datetime.strptime(datos['fecha'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		fecha_activa = date(1900,1,1)
+		#import ipdb; ipdb.set_trace()
+		q = PersonalSucursal.objects.all()
+		q = q.filter(Q(id_personal=datos['id_personal']),(Q(fecha_inicial__lte=fecha,fecha_final__gt=fecha)))
+		datosAsignacion = q
+		import ipdb; ipdb.set_trace()
+		#q = q.filter(Q(id_personal=datos['id_personal']),(Q(fecha_inicial__lte=fecha,fecha_final__gt=fecha)|Q(fecha_inicial__lte=fecha,fecha_final=fecha_activa)))
+		#import ipdb; ipdb.set_trace()
+		#datosAsignacion = PersonalSucursal.objects.filter(id_personal=datos['id_personal'], fecha_inicial__lte=fecha,fecha_final__gt=fecha)
+		#		q = Incidencia.objects.all()
+		#	q = q.filter(Q(fecha__gte=fecha_ini,fecha__lte=fecha_fin), 
+		#					Q(fecha__gte= F('id_personal__personalsucursal_id_personal__fecha_inicial'),fecha__lt= F('id_personal__personalsucursal_id_personal__fecha_final'))
+		#					| Q(fecha__gte= F('id_personal__personalsucursal_id_personal__fecha_inicial') ,id_personal__personalsucursal_id_personal__fecha_final=fecha_activa)
+		#					).values('id','id_personal__matricula','id_personal__paterno','id_personal__materno','id_personal__nombre',
+
+		#import ipdb; ipdb.set_trace()
+		if(len(datosAsignacion) == 0):
+			return Response({"El elemento no esta asignado en esa fecha en ningun servicio"}, status=status.HTTP_403_FORBIDDEN)
+		#datosAsignacion.cdu_motivo.cdu_catalogo
+		#datosAsignacion= PersonalSucursal.objects.get(id_personal=datos['id_personal']).first()
+		#print(datosAsignacion)
+		serializer = IncidenciaSerializer(data=datos)
 		if serializer.is_valid():
 			try:
 				serializer.save()
@@ -60,6 +84,7 @@ class IncidenciaModificacion(APIView):
 		datos = request.DATA
 		fecha = datetime.datetime.strptime(request.DATA['fecha'],'%d/%m/%Y').strftime('%Y-%m-%d')
 		incide_mod = Incidencia.objects.filter(id= pk, id_personal= datos['id_personal'],cdu_concepto_incidencia=datos['cdu_concepto_incidencia'],fecha=fecha)
+		
 		if(incide_mod.count() == 0):
 			return Response({"Solo se puede modificar la observacion de una incidencia"}, status=status.HTTP_403_FORBIDDEN)
 		incide_mod = Incidencia.objects.get(id=pk)	
