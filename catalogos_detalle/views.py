@@ -13,7 +13,6 @@ from .models import CatalogoDetalle
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def request_response_list(request,id_catalogo):
-	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':
 		catalogo_detalle= get_list_or_404(CatalogoDetalle, catalogos=id_catalogo)
 		serializer = CatalogoSerializer(catalogo_detalle, many=True)
@@ -23,7 +22,6 @@ def request_response_list(request,id_catalogo):
 #@authentication_classes((TokenAuthentication,))
 #@permission_classes((IsAuthenticated,))
 def request_response_detalle(request,id_catalogo):
-	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':
 		listado = id_catalogo.split(',')
 		catalogo_detalle=CatalogoDetalle.objects.filter(catalogos__in=listado)
@@ -49,7 +47,6 @@ def request_response_detalle(request,id_catalogo):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def request_response_detalle_cdu_default(request,id_catalogo,cdu_default):
-	#import ipdb; ipdb.set_trace()
 	if request.method == 'GET':
 		listado = id_catalogo.split(',')
 		catalogo_detalle=CatalogoDetalle.objects.filter(catalogos__in=listado,cdu_default=cdu_default)
@@ -59,11 +56,11 @@ def request_response_detalle_cdu_default(request,id_catalogo,cdu_default):
 
 
 @api_view(['POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+#@authentication_classes((TokenAuthentication,))
+#@permission_classes((IsAuthenticated,))
 def request_response_nuevo(request):
 	if request.method == 'POST':
-		serializer = CatalogoSerializer(data=request.DATA)
+		serializer = CatalogoSerializer(data=request.DATA, many=True)
 
 		if serializer.is_valid():
 			serializer.save()

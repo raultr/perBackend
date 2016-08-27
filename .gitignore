@@ -1,6 +1,7 @@
 *.pyc
 /**/*.pyc
 media/*
+venv/**/*.*
 catalogos/migrations/*
 catalogos_detalle/migrations/*
 empresas/migrations/*

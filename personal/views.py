@@ -66,7 +66,6 @@ class PersonalMenu(APIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get(self,request, pk=None, format=None):
-		#import ipdb;ipdb.set_trace();
 		data = {"personal":"Si"}
 		return Response(data,status=status.HTTP_201_CREATED)
 
@@ -98,7 +97,6 @@ class PersonalOperaciones(APIView):
 			try:
 				sid = transaction.savepoint()
 				nuevaPersona = serializer.save()	
-				#import ipdb;ipdb.set_trace();
 				datos_asignacion = request.DATA['asignacion'][0]
 				datos_asignacion['id_personal'] =  nuevaPersona.id
 				datos_asignacion['cdu_motivo'] =  '0250000'
@@ -158,8 +156,8 @@ class PersonalOperaciones(APIView):
 
 	
 class PersonalBusqueda(APIView):
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	#authentication_classes = (TokenAuthentication,)
+	#permission_classes = (IsAuthenticated,)
 	
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
@@ -177,7 +175,6 @@ class PersonalBusqueda(APIView):
 			listado = True
 		# la posicion la funcion de busqueda que se utilizara
 		busqueda = funciones_busqueda[i]
-		#import ipdb; ipdb.set_trace()
 		#serializer = PersonalSerializer(busqueda(valor_buscado), many=listado)
 		query = busqueda(valor_buscado)
 		if i>0:
@@ -211,13 +208,11 @@ class PersonalBusqueda(APIView):
 		#act['cdu_puesto']['descripcion1']
 		#act['cdu_rango']['descripcion1']
 
-
 		serializer.data['estatus']  = estatus
 		serializer.data["sucursal"] = act['id_sucursal']['nombre']
 		serializer.data["motivo"  ] = act['cdu_motivo']['descripcion1']
 		serializer.data["puesto"]   = act['cdu_puesto']['descripcion1']
 		serializer.data["rango"]    = act['cdu_rango']['descripcion1']
-		#import ipdb;ipdb.set_trace()
 		#'cdu_motivo' 0250000
 		#print(serializer.data['results'])
 		#return Response(query[0])
@@ -236,7 +231,6 @@ class PersonalBusqueda(APIView):
 		#qs= Personal.objects.filter(Q(personalsucursal_id_personal__isnull=True) | Q(personalsucursal_id_personal__isnull=False), Q(personalsucursal_id_personal__fecha_final='1900-01-01') | Q(personalsucursal_id_personal__fecha_final__isnull=True),matricula=id_matricula)
 		#qs=Personal.objects.only('id','matricula','paterno','materno','nombre','rfc','curp','cuip','fec_nacimiento','cdu_estado_nac','cdu_municipio_nac','cdu_estado_civil','cdu_escolaridad','cdu_seguridad_social','id_seguridad_social','portacion','cdu_tipo_alta','fec_alta','condicionada','condiciones_alta','cdu_tipo_empleado','calle_dom','numero_dom','colonia_dom','cp_dom','cdu_estado_dom','cdu_municipio_dom','imagen').filter(Q(personalsucursal_id_personal__isnull=True) | Q(personalsucursal_id_personal__isnull=False), Q(personalsucursal_id_personal__fecha_final='1900-01-01') | Q(personalsucursal_id_personal__fecha_final__isnull=True),matricula=id_matricula).select_related('personalsucursal_id_personal')
 		#qs=Personal.objects.filter(Q(personalsucursal_id_personal__isnull=True) | Q(personalsucursal_id_personal__isnull=False), Q(personalsucursal_id_personal__fecha_final='1900-01-01') | Q(personalsucursal_id_personal__fecha_final__isnull=True),matricula=id_matricula).select_related('personalsucursal_id_personal').defer('personalsucursal_id_personal_cdu_turno')
-		#import ipdb;ipdb.set_trace()
 		#serializer = PersonalSerializer(qs[0])
 		#return qs
 	

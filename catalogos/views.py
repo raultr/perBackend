@@ -12,15 +12,13 @@ from .models import Catalogo
 def request_response_list(request):
 	if request.method == 'GET':
 		catalogos = Catalogo.objects.all()
-		#import ipdb; ipdb.set_trace()
 		serializer = CatalogoSerializer(catalogos, many=True)
 		return Response(serializer.data)
-	
+
 	elif request.method == 'POST':
-		#import ipdb; ipdb.set_trace()
 		#parser_classes = (FileUploadParser,)
 		#file_obj = request.FILES['icono']
-		serializer = CatalogoSerializer(data=request.DATA)
+		serializer = CatalogoSerializer(data=request.DATA,many=True)
 		#import ipdb; ipdb.set_trace()
 		if serializer.is_valid():
 			serializer.save()
@@ -31,16 +29,13 @@ def request_response_list(request):
 def request_response_list_editables(request):
 	if request.method == 'GET':
 		catalogos = Catalogo.objects.filter(editable = True)
-		#import ipdb; ipdb.set_trace()
 		serializer = CatalogoSerializer(catalogos, many=True)
 		return Response(serializer.data)
 	
 	elif request.method == 'POST':
-		#import ipdb; ipdb.set_trace()
 		#parser_classes = (FileUploadParser,)
 		#file_obj = request.FILES['icono']
 		serializer = CatalogoSerializer(data=request.DATA)
-		#import ipdb; ipdb.set_trace()
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -50,6 +45,5 @@ def request_response_list_editables(request):
 def request_response_list2(request,pk):
 	if request.method == 'GET':
 		catalogos = Catalogo.objects.select_related(None).filter(id=pk)
-		#import ipdb; ipdb.set_trace()
 		serializer = CatalogoSerializer(catalogos, many=True)
 		return Response(serializer.data)

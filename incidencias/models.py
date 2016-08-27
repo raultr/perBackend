@@ -13,6 +13,7 @@ class Incidencia(models.Model):
 	cdu_concepto_incidencia =models.ForeignKey(CatalogoDetalle,to_field='cdu_catalogo',default='',related_name=' personalincidencia_cdu_motivo',limit_choices_to={'catalogos': 30}, on_delete=models.PROTECT)
 	fecha = models.DateField(default = '1900-01-01')
 	observaciones = models.CharField(max_length=200,blank=True)
+	cubre = models.ForeignKey("Incidencia",  default=None, null=True,blank=True, related_name="cubre_a")
 
 	def str(self):
 		return self.id_personal + ' ' + self.fecha

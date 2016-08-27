@@ -45,7 +45,6 @@ class SucursalOperaciones(APIView):
 		return Response(serializer.data)
 		
 	def post(self, request, format=None):
-		#import ipdb;ipdb.set_trace()
 		request.DATA['user'] =request.user.id
 		serializer = SucursalSerializer(data=request.DATA)
 		if serializer.is_valid():
@@ -101,7 +100,6 @@ class SucursalBusqueda(APIView):
 
 	def get(self, request, valor_buscado):
 		longitud = len(valor_buscado)
-		#import ipdb; ipdb.set_trace()
 		# Tupla de funciones de busqueda
 		funciones_busqueda=(self.por_cve_sucursal,self.por_nombre)
 		# La expresion regular esta relacionada una una con la tupla de campos

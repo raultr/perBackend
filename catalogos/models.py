@@ -14,7 +14,6 @@ class Catalogo(models.Model):
 		
 		if self.url_icono: #and not self.photo:
 			result = urllib.urlretrieve(self.url_icono)
-			#import ipdb; ipdb.set_trace()
 			self.icono.save(os.path.basename(self.url_icono),File(open(result[0])))
 		
 		super(Catalogo, self).save(*args, **kwargs)
@@ -22,7 +21,6 @@ class Catalogo(models.Model):
 
 	# def cache(self):
 	# 	"""Store image locally if we have a URL"""
-	# 	import ipdb; ipdb.set_trace()
 	# 	if self.url_icono: #and not self.photo:
 	# 		result = urllib.urlretrieve(self.url)
 	# 		self.icono.save(

@@ -16,7 +16,6 @@ class PersonalSerializer(serializers.ModelSerializer):
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(PersonalSerializer, self).get_validation_exclusions(*args, **kwargs)
-		#import ipdb; ipdb.set_trace()
 		return exclusions + ['matricula']
 
 	class Meta:

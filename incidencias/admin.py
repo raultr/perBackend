@@ -8,7 +8,7 @@ class IncidenciaInLine(admin.StackedInline): # No permite editar el catalogo_det
 
 
 class IncidenciaAdmin(admin.ModelAdmin):
-	list_display =('id','id_personal','cdu_concepto_incidencia','fecha','observaciones', )
+	list_display =('id','cubre','id_personal','cdu_concepto_incidencia','fecha','observaciones', )
 	search_fields = ('id_personal__matricula','id_sucursal__nombre',) # Campos por los que se puede buscar, si son campos foraneos se usa campo__nomcampoforaneo
 	list_filter =('cdu_concepto_incidencia',)
 

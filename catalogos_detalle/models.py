@@ -24,7 +24,6 @@ class CatalogoDetalle(models.Model):
 			#El cdu debe de ser 0010000
 			self.cdu_catalogo= str(self.catalogos.id).zfill(3) + str(self.num_dcatalogo).zfill(4)
 
-			#import ipdb; ipdb.set_trace()
 		
 		super(CatalogoDetalle, self).save(*args, **kwargs)
 

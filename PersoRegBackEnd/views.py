@@ -38,7 +38,6 @@ class TestView(APIView):
 				status=status.HTTP_401_UNAUTHORIZED
 			)
 
-		#import ipdb; ipdb.set_trace()
 		user = User.objects.first()
 		if not user:
 			return Response(
@@ -74,5 +73,4 @@ class TacView(APIView):
 		#tok.delete()
 		print tok[0].created
 		#El token tendra una duracion de 2 horas
-		import ipdb; ipdb.set_trace()
 		return Response({'detail': "I suppose you are authenticated"})

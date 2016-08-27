@@ -25,7 +25,6 @@ class PersonalSucusalMenu(APIView):
 	permission_classes = (IsAuthenticated,)
 	
 	def get(self,request, pk=None, format=None):
-		#import ipdb;ipdb.set_trace();
 		data = {"personal_sucursal":"Si"}
 		return Response(data,status=status.HTTP_201_CREATED)
 
@@ -44,7 +43,6 @@ class PersonalSucursalConsultas(APIView):
 			raise Http404
 
 	def get(self, request, id_perso=None,id_sucursal=None, format=None):
-		#import ipdb;ipdb.set_trace()
 		if(id_perso!=None):
 			persuc = self.get_object_persona_sucursal_activa(id_perso)
 			serializer = PersonalSucursalSerializer(persuc)
@@ -76,7 +74,6 @@ class PersonalSucursalOperaciones(APIView):
 	def post(self, request):
 		request.DATA['user'] =request.user.id
 		serializer = PersonalSucursalSerializerSimple(data=request.DATA)
-		#import ipdb; ipdb.set_trace()
 		if serializer.is_valid():	
 			try:	
 				serializer.save()

@@ -56,7 +56,6 @@ class PersonalSucursal(models.Model):
 		return True
 
 	def validarFechas(self):
-		#import ipdb; ipdb.set_trace()
 		#Revisamos que no existan asignacion con una fecha mayor a la que queremos.
 		fecMayor=PersonalSucursal.objects.filter(id_personal=self.id_personal, fecha_inicial__gte= self.fecha_inicial).count()
 		if fecMayor>0:

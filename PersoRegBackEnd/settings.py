@@ -109,7 +109,8 @@ DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql_psycopg2',
 		'NAME': 'personal',                      
-		'USER': 'raultr-hp',
+		#'USER': 'raultr-hp',
+		'USER': 'raultr',
 		'PASSWORD': 'rulo1000',
 		'HOST': 'localhost'
 	}
@@ -144,3 +145,4 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['media'])
 MEDIA_URL = '/media/'
 
+#  python ./manage.py syncdb --settings=PersoRegBackEnd.settings
