@@ -84,7 +84,7 @@ class IncidenciaNueva(APIView):
 		datosAsignacion = q
 		
 		if(len(datosAsignacion) == 0):
-			return 	"({}) {} {} {} no esta asignado en esa fecha en ningun servicio".format(datos_perso.matricula,datos_perso.nombre,datos_perso.paterno,datos_perso.materno)
+			return 	u"({}) {} {} {} no esta asignado en esa fecha en ningun servicio".format(datos_perso.matricula,datos_perso.nombre,datos_perso.paterno,datos_perso.materno)
 		return ""
 
 
@@ -220,7 +220,7 @@ class IncidenciaConsulta(APIView):
 			for inci_cub in cubre:
 				for detalles in reporte:
 					if(detalles['id']== inci_cub['cubre']):
-						detalles['datos_cubre'] = "({}) {} {} {}  {} ".format(inci_cub['id_personal__matricula'],inci_cub['id_personal__nombre'],inci_cub['id_personal__paterno'],inci_cub['id_personal__materno'],inci_cub['id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1'])
+						detalles['datos_cubre'] = u"({}) {} {} {}  {} ".format(inci_cub['id_personal__matricula'],inci_cub['id_personal__nombre'],inci_cub['id_personal__paterno'],inci_cub['id_personal__materno'],inci_cub['id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1'])
 
 			return Response(reporte)
 		except Incidencia.DoesNotExist:
