@@ -19,7 +19,6 @@ def request_response_list(request):
 		#parser_classes = (FileUploadParser,)
 		#file_obj = request.FILES['icono']
 		serializer = CatalogoSerializer(data=request.DATA,many=True)
-		#import ipdb; ipdb.set_trace()
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)

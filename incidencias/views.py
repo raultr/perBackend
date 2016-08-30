@@ -179,6 +179,7 @@ class IncidenciaConsulta(APIView):
 		fecha_ini =datetime.datetime.strptime(request.GET['fecha_ini'],'%d/%m/%Y').strftime('%Y-%m-%d')
 		fecha_fin =datetime.datetime.strptime(request.GET['fecha_fin'],'%d/%m/%Y').strftime('%Y-%m-%d')
 		fecha_activa = date(1900,1,1)
+		cdu_falta = '0300001'
 		try:
 			q = Incidencia.objects.all()
 			q = q.filter(Q(fecha__gte=fecha_ini,fecha__lte=fecha_fin), 
@@ -196,11 +197,30 @@ class IncidenciaConsulta(APIView):
 						'cdu_concepto_incidencia':'cdu_incidencia','cdu_concepto_incidencia__descripcion1':'incidencia',
 						'id_personal__personalsucursal_id_personal__cdu_turno':'cdu_turno','id_personal__personalsucursal_id_personal__cdu_turno__descripcion1':'turno',
 						'id_personal__personalsucursal_id_personal__cdu_puesto':'cdu_puesto','id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1':'puesto',
-						'id_personal__personalsucursal_id_personal__id_sucursal':'id_sucursal','id_personal__personalsucursal_id_personal__id_sucursal__nombre':'sucursal'}
+						'id_personal__personalsucursal_id_personal__id_sucursal':'id_sucursal','id_personal__personalsucursal_id_personal__id_sucursal__nombre':'sucursal',
+						'datos_cubre':'datos_cubre',}
 
 			reporte = []
-			for diccionario in q:
-				reporte.append(dict((columnas[key], value) for (key, value) in diccionario.items()))
+			#Incidencia.objects.values('id','id_personal__matricula','id_personal__nombre').filter(pk=70)
+			#Incidencia.objects.values('id','id_personal__matricula','id_personal__nombre').filter(id__in=[69,70])
+			faltas = q
+			faltas_id = []
+			
+			for fila in faltas:
+				fila['datos_cubre']=''
+				faltas_id.append(fila['id'])
+
+
+			for diccionario in faltas:
+				if(diccionario['cdu_concepto_incidencia']==cdu_falta):
+					reporte.append(dict((columnas[key], value) for (key, value) in diccionario.items()))
+
+			cubre = Incidencia.objects.all().values('id','cubre','id_personal__matricula','id_personal__paterno','id_personal__materno','id_personal__nombre','id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1').filter(cubre__in=faltas_id)
+
+			for inci_cub in cubre:
+				for detalles in reporte:
+					if(detalles['id']== inci_cub['cubre']):
+						detalles['datos_cubre'] = "({}) {} {} {}  {} ".format(inci_cub['id_personal__matricula'],inci_cub['id_personal__nombre'],inci_cub['id_personal__paterno'],inci_cub['id_personal__materno'],inci_cub['id_personal__personalsucursal_id_personal__cdu_puesto__descripcion1'])
 
 			return Response(reporte)
 		except Incidencia.DoesNotExist:
