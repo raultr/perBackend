@@ -24,6 +24,8 @@ urlpatterns = patterns('',
 	url(r'^', include('sucursales.urls')),
 	url(r'^', include('personal_sucursales.urls')),
 	url(r'^', include('incidencias.urls')),
+	url(r'^', include('uniformes.urls')),
+	url(r'^', include('uniformes_detalle.urls')),
 	url(r'^', include('subirf.urls')),
 )
 urlpatterns = format_suffix_patterns(urlpatterns)

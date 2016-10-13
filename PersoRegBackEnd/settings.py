@@ -56,6 +56,8 @@ INSTALLED_APPS = (
 	'sucursales',
 	'personal_sucursales',
 	'incidencias',
+	'uniformes',
+	'uniformes_detalle',
 	'subirf',
 )
 
