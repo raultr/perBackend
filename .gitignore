@@ -10,3 +10,5 @@ personal/migrations/*
 personal_sucursales/migrations/*
 sucursales/migrations/*
 incidencias/migrations/*
+uniformes/migrations/*
+uniformes_detalle/migrations/*
