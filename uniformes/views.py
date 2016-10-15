@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import datetime, date
+import datetime
 from django.db import IntegrityError
 from django.db import transaction
 from .models import Uniforme
@@ -30,6 +32,7 @@ class UniformeConDetallesLista(APIView):
 					if uniformes.first():
 						uniforme = uniformes.first()
 						uniforme.observaciones = datos['observaciones']
+						uniforme.fecha = datetime.datetime.strptime(datos['fecha'],'%d/%m/%Y').strftime('%Y-%m-%d')
 						uniforme.save()
 					else:
 						response = serializer_class.save()
