@@ -12,7 +12,9 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FileUploadParser
 from django.db.models import Q
-from .serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSimple,PersonalSucursalSerializerPersonal
+from datetime import datetime, date
+import datetime
+from .serializers import PersonalSucursalSerializer,PersonalSucursalSerializerSimple,PersonalSucursalSerializerPersonal,PersonalSucursalSerializerAsignacion
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -107,3 +109,19 @@ class PersonalSucursalReportes(APIView):
 												'cdu_rango__descripcion1','cdu_turno__descripcion1','cdu_motivo','cdu_motivo__descripcion1').select_related().filter(id_sucursal__cve_empresa__in=listado, fecha_final="1900-01-01")
 		serialized = json.dumps(list(queryset), cls=DjangoJSONEncoder)#DjangoJSONEncoder para que se lleve bien con fechas y decimales
 		return Response(list(queryset))
+
+class PersonalSucursalFecha(APIView):	
+	def get_object_por_id(self, id_personal, fecha):
+		try:
+			fecha_activa = date(1900,1,1)
+			fecha =datetime.datetime.strptime(fecha,'%d-%m-%Y').strftime('%Y-%m-%d')
+			q = PersonalSucursal.objects.all()
+			q = q.filter(Q(id_personal=id_personal),(Q(fecha_inicial__lte=fecha,fecha_final__gt=fecha)|Q(fecha_inicial__lte=fecha,fecha_final=fecha_activa)))	
+			return q
+		except:
+			raise Http404
+
+	def get(self, request,id_perso,fecha_asignacion):
+		asignacion = self.get_object_por_id(id_perso,fecha_asignacion)
+		serializer = PersonalSucursalSerializerAsignacion(asignacion, many=True)
+		return Response(serializer.data)

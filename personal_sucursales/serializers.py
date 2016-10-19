@@ -42,6 +42,15 @@ class PersonalSucursalSerializerSimple(serializers.ModelSerializer):
 		fields =('id','id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo',
 		 		'fecha_inicial','fecha_final','motivo','user')
 
+class PersonalSucursalSerializerAsignacion(serializers.ModelSerializer):
+	id_sucursal = SucursalSerializer(read_only=True, required=False)
+	fecha_inicial =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
+	fecha_final =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
+	class Meta:
+		model = PersonalSucursal
+		fields =('id','id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo',
+		 		'fecha_inicial','fecha_final','motivo','user')
+
 class PersonalSucursalSerializerPersonal(serializers.ModelSerializer):
 	id_personal =PersonalSerializer(read_only=True, required= False)
 	class Meta:
