@@ -5,6 +5,8 @@ from uniformes_detalle.serializers import UniformeDetalleSerializer
 
 class UniformeSerializer(serializers.ModelSerializer):
 	fecha =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
+	fecha_servicio =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
+	
 	detalle_uniforme = UniformeDetalleSerializer(many=True, read_only=True)
 
 	class Meta:
