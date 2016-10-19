@@ -33,6 +33,8 @@ class UniformeConDetallesLista(APIView):
 						uniforme = uniformes.first()
 						uniforme.observaciones = datos['observaciones']
 						uniforme.fecha = datetime.datetime.strptime(datos['fecha'],'%d/%m/%Y').strftime('%Y-%m-%d')
+						uniforme.fecha_servicio = datetime.datetime.strptime(datos['fecha_servicio'],'%d/%m/%Y').strftime('%Y-%m-%d')
+						
 						uniforme.save()
 					else:
 						response = serializer_class.save()

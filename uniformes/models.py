@@ -13,6 +13,7 @@ from personal.models import Personal
 class Uniforme(models.Model):
 	id_personal = models.ForeignKey(Personal,related_name='personaluniforme_id_personal', on_delete=models.PROTECT,null=True)
 	fecha = models.DateField(default = '1900-01-01')
+	fecha_servicio =  models.DateField(default = '1900-01-01')
 	anio = models.IntegerField(default=0)
 	periodo = models.IntegerField(default=0)
 	observaciones = models.CharField(max_length=200,blank=True)

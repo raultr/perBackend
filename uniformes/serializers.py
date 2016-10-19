@@ -9,7 +9,7 @@ class UniformeSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Uniforme
-		fields =('id','id_personal','fecha','anio','periodo','observaciones','detalle_uniforme')
+		fields =('id','id_personal','fecha','fecha_servicio','anio','periodo','observaciones','detalle_uniforme')
 
 	# def create(self, validated_data):
 	# 	import ipdb;ipdb.set_trace()
