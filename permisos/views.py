@@ -12,6 +12,7 @@ from django.utils.timezone import get_current_timezone
 
 from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from .models import Permiso
 from .serializers import PermisoSerializer
