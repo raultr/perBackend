@@ -18,9 +18,7 @@ from .serializers import PermisoSerializer
  
 class PermisoAdministrador(APIView):
 	authentication_classes = (TokenAuthentication,)
-
-	GRUPO_ADMIN = 'Administrador'
-	GRUPO_SUPERVISOR = "Supervisor"
+	permission_classes = (IsAuthenticated,)
 
 	def has_permission(self, request, view):
 		MENU_PERMISOS = []
@@ -37,7 +35,7 @@ class PermisoAdministrador(APIView):
 
 class PermisoRolBuscar(APIView):
 	authentication_classes = (TokenAuthentication,)
-	#permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated,)
 	
 	def get(self, request, rol_buscado):
 		accesos = Permiso.objects.filter(rol=rol_buscado)
