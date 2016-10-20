@@ -18,25 +18,25 @@ from .models import Permiso
 from .serializers import PermisoSerializer
  
 class PermisoAdministrador(APIView):
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	#authentication_classes = (TokenAuthentication,)
+	#permission_classes = (IsAuthenticated,)
 
 	def has_permission(self, request, view):
 		MENU_PERMISOS = []
-		request.user.groups.all().first()
 		permiso = request.user.groups.all().first()
-		accesos = Permiso.objects.filter(rol=permiso.name)
-		MENU_PERMISOS.append(accesos)
+		accesos = Permiso.objects.filter(rol=permiso.name).first()
+		MENU_PERMISOS.append(accesos.permisos)
 		return MENU_PERMISOS
 
 	def get(self, request, format=None):
 		permisos = self.has_permission(request,"")
-		return Response({"Permiso": permisos[0][0].permisos})
+		#import ipdb;ipdb.set_trace()
+		return Response({"Permiso": permisos[0]})
 
 
 class PermisoRolBuscar(APIView):
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
+	#authentication_classes = (TokenAuthentication,)
+	#permission_classes = (IsAuthenticated,)
 	
 	def get(self, request, rol_buscado):
 		accesos = Permiso.objects.filter(rol=rol_buscado)
