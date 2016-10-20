@@ -21,17 +21,19 @@ class PermisoAdministrador(APIView):
 	#authentication_classes = (TokenAuthentication,)
 	#permission_classes = (IsAuthenticated,)
 
+	#def has_permission(self, request, view):
+	#	MENU_PERMISOS = []
+	#	permiso = request.user.groups.all().first()
+	#	accesos = Permiso.objects.filter(rol=permiso.name).first()
+	#	MENU_PERMISOS.append(accesos.permisos)
+	#	return MENU_PERMISOS
+
 	def has_permission(self, request, view):
-		MENU_PERMISOS = []
-		permiso = request.user.groups.all().first()
-		accesos = Permiso.objects.filter(rol=permiso.name).first()
-		MENU_PERMISOS.append(accesos.permisos)
-		return MENU_PERMISOS
+		return request.user.groups.all().first()
 
 	def get(self, request, format=None):
 		permisos = self.has_permission(request,"")
-		#import ipdb;ipdb.set_trace()
-		return Response({"Permiso": permisos[0]})
+		return Response({"Permiso": permisos.name})
 
 
 class PermisoRolBuscar(APIView):
