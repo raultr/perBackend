@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 	url(r'^test/', TestView.as_view(), name='auth-view2'),
 	url(r'^api-token-auth/', views.obtain_auth_token),
 	url(r'^prueba_autenticacion/', TacView.as_view()),
-	
+	url(r'^', include('permisos.urls')),
 	url(r'^', include('catalogos.urls')),
 	url(r'^', include('catalogos_detalle.urls')),
 	url(r'^', include('personal.urls')),

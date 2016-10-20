@@ -12,3 +12,4 @@ sucursales/migrations/*
 incidencias/migrations/*
 uniformes/migrations/*
 uniformes_detalle/migrations/*
+permisos/migrations/*

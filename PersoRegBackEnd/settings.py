@@ -58,6 +58,7 @@ INSTALLED_APPS = (
 	'incidencias',
 	'uniformes',
 	'uniformes_detalle',
+	'permisos',
 	'subirf',
 )
 
