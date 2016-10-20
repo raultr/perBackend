@@ -24,21 +24,15 @@ class PermisoAdministrador(APIView):
 
 	def has_permission(self, request, view):
 		MENU_PERMISOS = []
-		result = request.user and request.user.groups.filter(name=self.GRUPO_ADMIN)
-		if result.count()>0:
-			MENU_PERMISOS.append("*")
-			return MENU_PERMISOS
-
-		result = request.user and request.user.groups.filter(name=self.GRUPO_SUPERVISOR)
-		if result.count()>0:
-			MENU_PERMISOS.append("incidencias")
-			return MENU_PERMISOS
-
+		request.user.groups.all().first()
+		permiso = request.user.groups.all().first()
+		accesos = Permiso.objects.filter(rol=permiso.name)
+		MENU_PERMISOS.append(accesos)
 		return MENU_PERMISOS
 
 	def get(self, request, format=None):
 		permisos = self.has_permission(request,"")
-		return Response({"permisos": permisos})
+		return Response({"Permiso": permisos[0][0].permisos})
 
 
 class PermisoRolBuscar(APIView):
