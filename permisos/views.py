@@ -15,7 +15,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from .models import Permiso
-from .serializers import PermisoSerializer
+from .serializers import PermisoSerializer,UsuarioSerializer
  
 class PermisoAdministrador(APIView):
 	#authentication_classes = (TokenAuthentication,)
@@ -44,3 +44,10 @@ class PermisoRolBuscar(APIView):
 		accesos = Permiso.objects.filter(rol=rol_buscado)
 		serializer = PermisoSerializer(accesos, many=True)
 		return Response(serializer.data)
+
+class PermisoDatoUsuario(APIView):
+	def get(self, request):
+			usuario =  request.user;
+			serializer = UsuarioSerializer(usuario)
+			return Response(serializer.data)
+
