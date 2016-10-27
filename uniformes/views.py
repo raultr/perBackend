@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.exceptions import PermissionDenied
 from datetime import datetime, date
 import datetime
 from django.db import IntegrityError
@@ -39,8 +40,11 @@ class UniformeConDetallesLista(APIView):
 					else:
 						response = serializer_class.save()
 						uniforme = Uniforme.objects.get(id=response.id)	
-						
-					UniformeDetalle.objects.filter(uniforme=uniforme.pk).delete()
+					existe_detalle = UniformeDetalle.objects.filter(uniforme=uniforme.pk)
+					if existe_detalle.count()>0:
+						raise PermissionDenied
+
+ 					UniformeDetalle.objects.filter(uniforme=uniforme.pk).delete()
 					uniforme_detalle_datos = request.DATA.pop('detalle_uniforme')
 					for detalle_datos in uniforme_detalle_datos:
 						catalogo_uniforme = CatalogoDetalle.objects.get(cdu_catalogo=detalle_datos['cdu_concepto_uniforme'])
@@ -52,6 +56,8 @@ class UniformeConDetallesLista(APIView):
 				return Response(datos.data, status=status.HTTP_201_CREATED)
 			except IntegrityError as ex:
 				return Response({'error': str(ex)}, status=status.HTTP_403_FORBIDDEN)
+			except PermissionDenied as ex:
+				return Response({"Los uniformes asignados no se pueden modificar"}, status=status.HTTP_403_FORBIDDEN)
 			except Exception as ex:
 				return Response({'error': str(ex)}, status=status.HTTP_403_FORBIDDEN)
 		return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
