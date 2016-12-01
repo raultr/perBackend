@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Uniforme
 from uniformes_detalle.models import UniformeDetalle
 from uniformes_detalle.serializers import UniformeDetalleSerializer
+from personal.serializers import PersonalSerializer
 
 class UniformeSerializer(serializers.ModelSerializer):
 	fecha =serializers.DateTimeField(format='%d/%m/%Y',input_formats=['%d/%m/%Y'])
@@ -12,6 +13,15 @@ class UniformeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Uniforme
 		fields =('id','id_personal','fecha','fecha_servicio','anio','periodo','observaciones','detalle_uniforme')
+
+
+class UniformeSerializerReporte(serializers.ModelSerializer):
+	detalle_uniforme = UniformeDetalleSerializer(many=True, read_only=True)
+	id_personal =PersonalSerializer(read_only=True, required= False)
+	class Meta:
+		model = Uniforme
+		fields =('id','id_personal','fecha','fecha_servicio','anio','periodo','observaciones','detalle_uniforme')
+
 
 	# def create(self, validated_data):
 	# 	import ipdb;ipdb.set_trace()
