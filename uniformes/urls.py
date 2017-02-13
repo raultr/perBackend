@@ -7,4 +7,7 @@ urlpatterns = patterns('uniformes.views',
  	 url(r'^uniforme/reporte/$',views.UniformeConDetallesListaReporte.as_view(), name='uniforme_reporte_view'),
  	 url(r'^uniforme/reporte_general/$',views.UniformeReporteGeneral.as_view(), name='uniforme_reporte_general'),
  	 url(r'^uniforme/personal/$',views.PersonalUniformeConDetalles.as_view(), name='personal_uniforme_view'),
+ 	 url(r'^uniforme/periodo/$',views.PeriodosDeEntrega.as_view(), name='personal_uniforme_periodos_view'),
+
 	)
+

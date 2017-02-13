@@ -25,6 +25,7 @@ class PersonalSucursalResource(resources.ModelResource):
 		export_order = ('id','id_personal','nombre','paterno','materno','id_sucursal','sucursal','turno','puesto','rango','sueldo',
 				'fecha_inicial','fecha_final','motivo', )
 
+
 class PersonalSucursalAdmin2(ImportExportModelAdmin):
 	resource_class = PersonalSucursalResource
 	list_display =('id','activa','id_personal','id_sucursal','cdu_motivo','cdu_turno','cdu_puesto','cdu_rango','sueldo',

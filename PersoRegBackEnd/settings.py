@@ -148,4 +148,5 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2] + ['media'])
 MEDIA_URL = '/media/'
 
+#  ssh -p 2234 miregion@104.131.161.180
 #  python ./manage.py syncdb --settings=PersoRegBackEnd.settings
