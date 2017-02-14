@@ -12,17 +12,17 @@ from uniformes_detalle.models import UniformeDetalle
 from catalogos_detalle.models import CatalogoDetalle
 from .serializers import UniformeSerializer,UniformeDetalleSerializer,UniformeSerializerReporte
 
-class PeriodosDeEntrega(APIView):
-	def get(self, request, pk=None, format=None):
+class PeriodosCalculos():
+	def determinar_periodo_actual(self,panio, pmes):
 		hoy = date.today()
 		anio = hoy.year
 		mes = hoy.month
 
-		if 'anio' in request.GET:
-			anio = int(request.GET['anio'])
+		if panio>0:
+			anio = panio
 		
-		if 'mes' in request.GET:
-			mes = int(request.GET['mes'])		
+		if pmes>0:
+			mes = pmes
 		
 		periodos = [1,6,7,12]
 		periodo_actual=1
@@ -32,16 +32,29 @@ class PeriodosDeEntrega(APIView):
 		periodo1 = self.calcular_periodo(anio,periodos[0],periodos[1])
 		periodo2 = self.calcular_periodo(anio,periodos[2],periodos[3])
 
-		data = {"anio":anio,"periodo": periodo_actual,
-		        "periodo1_ini":periodo1["inicial"], "periodo1_fin": periodo1["final"],
-		        "periodo2_ini":periodo2["inicial"], "periodo2_fin": periodo2["final"]}
-		return Response(data,status=status.HTTP_201_CREATED)
+		datos = {"anio":anio,"mes":mes,"periodo": periodo_actual,"periodo1_ini":periodo1["inicial"], "periodo1_fin": periodo1["final"],"periodo2_ini":periodo2["inicial"], "periodo2_fin": periodo2["final"]}
+		return datos
 
 	def calcular_periodo(self,anio,mes_ini,mes_fin):
 		periodo_ini = datetime.date(anio, mes_ini, 1)
 		ultimo_dia = calendar.monthrange(anio,mes_fin)[1]
 		periodo_fin = datetime.date(anio, mes_fin, ultimo_dia)
 		return {"inicial":periodo_ini.strftime('%d/%m/%Y'),"final":periodo_fin.strftime('%d/%m/%Y')}
+
+
+class PeriodosDeEntrega(APIView):
+	def get(self, request, pk=None, format=None):
+		anio=0
+		mes=0
+		if 'anio' in request.GET:
+			anio = int(request.GET['anio'])
+		if 'mes' in request.GET:
+			mes = int(request.GET['mes'])
+
+		per_cal = PeriodosCalculos()
+		datos_periodo = per_cal.determinar_periodo_actual(anio,mes)
+		return Response(datos_periodo,status=status.HTTP_201_CREATED)
+
 
 
 class UniformeConDetallesLista(APIView):
@@ -55,6 +68,11 @@ class UniformeConDetallesLista(APIView):
 	
 	def post(self, request, format=None):
 		serializer_class = UniformeSerializer(data=request.DATA)
+		per_cal = PeriodosCalculos()
+		per_act = per_cal.determinar_periodo_actual(0,0)
+		if per_act['anio'] != request.DATA['anio'] or per_act['periodo'] != request.DATA['periodo']:
+			return Response({"Solo se pueden guardar uniformes para el periodo actual"}, status=status.HTTP_403_FORBIDDEN)
+
 		if serializer_class.is_valid():
 			try:
 				with transaction.atomic():
