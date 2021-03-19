@@ -9,7 +9,7 @@ django-debug-toolbar==1.2.2
 django-import-export==0.2.8
 django-mockups==0.4.8
 django-oauth-toolkit==0.8.1
-djangorestframework==2.4.4
+djangorestframework==3.11.2
 easy-thumbnails==2.2
 ipdb==0.8
 ipython==2.3.1
