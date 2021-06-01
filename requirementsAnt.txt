@@ -10,6 +10,6 @@ pysmbc==1.0.14.1
 pyxdg==0.25
 reportlab==3.0
 sorl-thumbnail==11.12.1b
-urllib3==1.7.1
+urllib3==1.26.5
 virtualenv==1.11.6
 wsgiref==0.1.2
