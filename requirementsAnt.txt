@@ -8,7 +8,7 @@ pycups==1.9.66
 pyserial==2.6
 pysmbc==1.0.14.1
 pyxdg==0.25
-reportlab==3.0
+reportlab==3.5.55
 sorl-thumbnail==11.12.1b
 urllib3==1.7.1
 virtualenv==1.11.6
